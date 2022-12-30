@@ -6,6 +6,7 @@ import CompletionPage from './completePage';
 import MemberLoginPage from './memberLogin';
 import AdminLoginPage from './adminLogin';
 import AdminConsole from './adminConsole';
+import Privacy from './privacyPolicy';
 
 import { Routes, Route } from "react-router-dom"
 
@@ -22,6 +23,7 @@ function App() {
                 <Route path='member-login' element={<MemberLoginPage/>}/>
                 <Route path='admin-login' element={<AdminLoginPage/>}/>
                 <Route path='admin' element={<AdminConsole/>}/>
+                <Route path='privacy-policy' element={<Privacy/>}/>
             </Routes>
         </div>
     );

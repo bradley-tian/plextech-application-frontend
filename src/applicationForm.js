@@ -150,7 +150,7 @@ const ApplicationForm = () => {
               if (gender === '') {
                 setGender(values.gender);
               }
-              await fetch('http://127.0.0.1:5000/add_applicant', {
+              await fetch('https://plextech-application-backend-production.up.railway.app/add_applicant', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -271,9 +271,9 @@ const ApplicationForm = () => {
                     <div className="horizontal-box">
                     <label htmlFor="answer1">There are many technology organization on campus;<br />what inspires you to join PlexTech?</label>
                     <p>(~300 words)</p>
-                    <input
+                    <textarea
                       id='answer1'
-                      type='textarea'
+                      type='text'
                       {...formik.getFieldProps('answer1')} />
                     {formik.touched.answer1 && formik.errors.answer1 ? <div>{formik.errors.answer1}</div> : null}
 
@@ -283,9 +283,9 @@ const ApplicationForm = () => {
                     <div className="horizontal-box">
                     <label htmlFor="answer1">Tell us a story that best captures you as a person.</label>
                     <p>(~300 words)</p>
-                    <input
+                    <textarea
                       id='answer2'
-                      type='textarea'
+                      type='text'
                       {...formik.getFieldProps('answer2')} />
                     {formik.touched.answer2 && formik.errors.answer2 ? <div>{formik.errors.answer2}</div> : null}
                     </div>
@@ -294,9 +294,9 @@ const ApplicationForm = () => {
                     <div className="horizontal-box">
                     <label htmlFor="commitments">Please tell us about your commitments.</label>
                     <p>(Example: CS61A: xx hours)</p>
-                    <input
+                    <textarea
                       id='commitments'
-                      type='textarea'
+                      type='text'
                       {...formik.getFieldProps('commitments')} />
                     {formik.touched.commitments && formik.errors.commitments ? <div>{formik.errors.commitments}</div> : null}
                     </div>

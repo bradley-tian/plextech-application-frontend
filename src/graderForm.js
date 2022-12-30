@@ -52,7 +52,7 @@ const GraderForm = () => {
 
   //Load Applicant Data
   async function fetchData() {
-    let url = "http://127.0.0.1:5000/get_applicant/" + state.email
+    let url = "https://plextech-application-backend-production.up.railway.app/get_applicant/" + state.email
     await fetch(url, {
       method: 'GET',
     })
@@ -83,16 +83,16 @@ const GraderForm = () => {
           const resumeURL = URL.createObjectURL(blob);
 
           applicantData.push({
-            timestamp : applicant.time_created,
-            firstName : applicant.first_name,
-            lastName : applicant.last_name,
-            resume : resumeURL,
-            answer1 : applicant.answer1,
-            answer2 : applicant.answer2,
-            commitments : applicant.commitments,
-            year : applicant.year,
-            major : applicant.major,
-            gender : applicant.gender,
+            timestamp: applicant.time_created,
+            firstName: applicant.first_name,
+            lastName: applicant.last_name,
+            resume: resumeURL,
+            answer1: applicant.answer1,
+            answer2: applicant.answer2,
+            commitments: applicant.commitments,
+            year: applicant.year,
+            major: applicant.major,
+            gender: applicant.gender,
           })
         }
         setData(applicantData);
@@ -107,7 +107,7 @@ const GraderForm = () => {
 
     //Authentication Check
     async function checkUser(value) {
-      await fetch('http://127.0.0.1:5000/check_grader', {
+      await fetch('https://plextech-application-backend-production.up.railway.app/check_grader', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -149,7 +149,7 @@ const GraderForm = () => {
           gender: userInfo[0].gender,
         }}
         onSubmit={async () => {
-          await fetch('http://127.0.0.1:5000/add_review', {
+          await fetch('https://plextech-application-backend-production.up.railway.app/add_review', {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -172,7 +172,7 @@ const GraderForm = () => {
                 navigate('/complete')
               }
               setData(newData);
-              window.scrollTo(0,0);
+              window.scrollTo(0, 0);
               setRating0('1');
               setRating1('1');
               setRating2('1');
@@ -356,29 +356,23 @@ const GraderForm = () => {
                     <option value={5}>5</option>
                   </select>
                 </div>
-
-                {/* Submit Button */}
-                <div>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="neutral"
-                    fontWeight="Bold"
-                    style={{
-                      width: "12%",
-                      marginBottom: "4rem",
-                      marginTop: "2.5rem"
-                    }}
-                  >
-                    Submit
-                  </Button>
-                </div>
-
               </form>
             </div>
           </div>
         )}
       </Formik>
+      {/* Submit Button */}
+      <div className='horizontal-box'>
+        <Button
+          type="submit"
+          variant="contained"
+          color="neutral"
+          fontWeight="Bold"
+        >
+          Submit
+        </Button>
+      </div>
+      <br />
     </ThemeProvider>
   );
 };

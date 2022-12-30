@@ -29,7 +29,7 @@ function MemberLoginPage() {
     async function handleResponse(response) {
         var userObject = jwt_decode(response.credential);
         const email = userObject.email;
-        await fetch('http://127.0.0.1:5000/check_grader', {
+        await fetch('https://plextech-application-backend-production.up.railway.app/check_grader', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

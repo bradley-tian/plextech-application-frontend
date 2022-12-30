@@ -349,6 +349,10 @@ select, textarea {
   text-overflow: break-word;
 }
 
+textarea {
+  width: 60%;
+  height: 8rem;
+}
 .horizontal-box {
   margin-bottom: 3rem;
 }
