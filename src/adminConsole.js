@@ -11,6 +11,7 @@ function AdminConsole() {
     const { state } = useLocation();
     const navigate = useNavigate();
     const [graderMessage, setGraderMessage] = useState("");
+    const [CSVMessage, setCSVMessage] = useState("");
     const [graders, setGraders] = useState([]);
     const [action1, setAction1] = useState('add');
 
@@ -162,18 +163,18 @@ function AdminConsole() {
 
                 <h4>Current Assignments</h4>
                 <div>
-                  {Object.keys(assignments).map(key => {
-                    return (
-                      <div>
-                        <h6>{key}</h6>
-                        <ul>
-                          {assignments[key].map(value => (
-                            <li key={value}>{value}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    );
-                  })}
+                    {Object.keys(assignments).map(key => {
+                        return (
+                            <div>
+                                <h6>{key}</h6>
+                                <ul>
+                                    {assignments[key].map(value => (
+                                        <li key={value}>{value}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        );
+                    })}
                 </div>
             </>
         );
@@ -186,30 +187,34 @@ function AdminConsole() {
             await fetch('https://plextech-application-backend-production.up.railway.app/export_results', {
                 method: 'GET',
             })
-            .then((response) => {
-                return (response.json());
-            })
-            .then((data) => {
-                const options = { 
-                    fieldSeparator: ',',
-                    quoteStrings: '"',
-                    decimalSeparator: '.',
-                    showLabels: true, 
-                    showTitle: true,
-                    title: 'Grading Results',
-                    useTextFile: false,
-                    useBom: true,
-                  };
-                const csvExport = new ExportToCsv(options);
-                csvExport.generateCsv(data);
-            })
-            .catch((err) => {
-                console.log(err.message);
-            });
+                .then((response) => {
+                    return (response.json());
+                })
+                .then((data) => {
+                    if (data.length === 0) {
+                        setCSVMessage("There are currently no reviews.");
+                    } else {
+                        const options = {
+                            fieldSeparator: ',',
+                            quoteStrings: '"',
+                            decimalSeparator: '.',
+                            showLabels: true,
+                            showTitle: true,
+                            title: 'Grading Results',
+                            useTextFile: false,
+                            useBom: true,
+                        };
+                        const csvExport = new ExportToCsv(options);
+                        csvExport.generateCsv(data);
+                    }
+                })
+                .catch((err) => {
+                    console.log(err.message);
+                });
         }
         return (
             <>
-            <Button
+                <Button
                     style={{ display: "flex" }}
                     variant="contained"
                     color="neutral"
@@ -218,6 +223,7 @@ function AdminConsole() {
                     href={csvURL}
                     download
                 >Export Results as CSV File</Button>
+                <p>{CSVMessage}</p>
             </>
         )
     }
