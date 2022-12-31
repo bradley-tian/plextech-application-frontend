@@ -152,7 +152,10 @@ const ApplicationForm = () => {
               }
               await fetch('https://plextech-application-backend-production.up.railway.app/add_applicant', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Access-Control-Allow-Origin': '*',
+                },
                 body: JSON.stringify({
                   first_name: values.firstName,
                   last_name: values.lastName,
