@@ -137,7 +137,8 @@ input[type='textarea'],
   font-size: 1rem;
   border: 1px solid #b7b7b7;
   background-color: transparent;
-  color: var(--gray-100);
+  color: black;
+  font-family: 'DM Sans';
   box-shadow: 0px, 2px, 1px, #A85d02;
   border-radius: 5px;
   -webkit-appearance: none;
