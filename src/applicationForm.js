@@ -98,6 +98,7 @@ const ApplicationForm = () => {
   const [resume, setResume] = React.useState();
   const [year, setYear] = React.useState('2023');
   const [gender, setGender] = React.useState('');
+  const [loadingMessage, setLoading] = React.useState('');
 
   const getBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -153,6 +154,7 @@ const ApplicationForm = () => {
                 if (gender === '') {
                   setGender(values.gender);
                 }
+                setLoading('Submitting your application; please wait...')
                 await fetch('https://plextech-application-backend-production.up.railway.app/add_applicant', {
                   method: 'POST',
                   headers: {
@@ -342,7 +344,8 @@ const ApplicationForm = () => {
                           style={{ "marginBottom": "50px" }}
                         >Submit</Button>
                       </div>
-                      <p className="copyright">Copyright © 2022 PlexTech All Rights Reserved.</p>
+                      <p>{loadingMessage}</p>
+                      <p className="copyright">Copyright © 2023 PlexTech All Rights Reserved.</p>
                     </form>
                   </div>
                 </div>
@@ -350,8 +353,6 @@ const ApplicationForm = () => {
             </Formik>
           </ThemeProvider>
         </div>
-
-        {/* <img src={illustration} className='image'></img> */}
       </div>
     </>
   );

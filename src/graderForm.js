@@ -43,6 +43,7 @@ const GraderForm = () => {
   const [comment1, setComment1] = useState('');
   const [comment2, setComment2] = useState('');
   const [comment3, setComment3] = useState('');
+  const [loadingMessage, setLoading] = useState('');
 
   const navToHome = () => {
     navigate("/");
@@ -149,6 +150,7 @@ const GraderForm = () => {
           gender: userInfo[0].gender,
         }}
         onSubmit={async () => {
+          setLoading('Submitting your application; please wait...');
           await fetch('https://plextech-application-backend-production.up.railway.app/add_review', {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -356,22 +358,24 @@ const GraderForm = () => {
                     <option value={5}>5</option>
                   </select>
                 </div>
+                {/* Submit Button */}
+                <div className='horizontal-box'>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="neutral"
+                    fontWeight="Bold"
+                  >
+                    Submit
+                  </Button>
+                </div>
+                <p>{loadingMessage}</p>
               </form>
             </div>
           </div>
         )}
       </Formik>
-      {/* Submit Button */}
-      <div className='horizontal-box'>
-        <Button
-          type="submit"
-          variant="contained"
-          color="neutral"
-          fontWeight="Bold"
-        >
-          Submit
-        </Button>
-      </div>
+
       <br />
     </ThemeProvider>
   );
