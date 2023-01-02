@@ -5,6 +5,7 @@ import "./styles.css";
 import Button from '@mui/material/Button';
 import { useNavigate } from "react-router-dom";
 import illustration from './PlexFigure.png';
+import PlexTechLogo from './PlexTechLogo.png'
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -119,223 +120,241 @@ const ApplicationForm = () => {
 
   return (
     <>
-      <div>
-        <ThemeProvider theme={theme}>
-          <Formik
-            initialValues={{
-              firstName: '',
-              lastName: '',
-              timestamp: Date.now(),
-              desiredRoles: [],
-              answer1: '',
-              answer2: '',
-              commitments: '',
-              major: '',
-              gender: '',
-            }}
-            validationSchema={
-              Yup.object(
-                {
-                  firstName: Yup.string().required('Required'),
-                  lastName: Yup.string().required('Required'),
-                  desiredRoles: Yup.array().required('Required'),
-                  answer1: Yup.string().required('Required').max(2000, 'Response must not exceed 2000 characters.'),
-                  answer2: Yup.string().required('Required').max(2000, 'Response must not exceed 2000 characters.'),
-                  commitments: Yup.string().required('Required'),
-                  major: Yup.string().required('Required'),
-                }
-              )
-            }
-            onSubmit={async (values) => {
-              if (gender === '') {
-                setGender(values.gender);
+      <div style={{ display: 'flex' }}>
+        <div>
+          <ThemeProvider theme={theme}>
+
+            <Formik
+              initialValues={{
+                firstName: '',
+                lastName: '',
+                timestamp: Date.now(),
+                desiredRoles: [],
+                answer1: '',
+                answer2: '',
+                commitments: '',
+                major: '',
+                gender: '',
+              }}
+              validationSchema={
+                Yup.object(
+                  {
+                    firstName: Yup.string().required('Required'),
+                    lastName: Yup.string().required('Required'),
+                    desiredRoles: Yup.array().required('Required'),
+                    answer1: Yup.string().required('Required').max(2000, 'Response must not exceed 2000 characters.'),
+                    answer2: Yup.string().required('Required').max(2000, 'Response must not exceed 2000 characters.'),
+                    commitments: Yup.string().required('Required'),
+                    major: Yup.string().required('Required'),
+                  }
+                )
               }
-              await fetch('https://plextech-application-backend-production.up.railway.app/add_applicant', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Access-Control-Allow-Origin': '*',
-                },
-                body: JSON.stringify({
-                  first_name: values.firstName,
-                  last_name: values.lastName,
-                  time_created: values.timestamp,
-                  desired_roles: values.desiredRoles,
-                  resume: resume,
-                  answer1: values.answer1,
-                  answer2: values.answer2,
-                  commitments: values.commitments,
-                  year: year,
-                  major: values.major,
-                  gender: gender,
-                  assigned_to: [],
-                  graded_by: [],
-                })
-              }).then(() => {
-                navigate('/success');
-              });
-            }}
-          >
-            {formik => (
-              <div className='application-form'>
-                <span>
-                  <Button style={{ "display": "flex" }}
-                    variant="contained"
-                    color="neutral"
-                    onClick={navToHome}
-                    className="navHome">Return Home</Button>
-
-                  <h1 style={{ "display": "flex" }}>PlexTech Application - Spring 2023</h1>
-
-                  <br />
-                </span>
-
-                <div>
-                  <h4>Thank you for your interest in PlexTech! Please fill out the information below and we will get back to you soon. </h4>
-
-                  <form onSubmit={formik.handleSubmit}>
-
-                    {/* First Name */}
-                    <div className="horizontal-box">
-                      <label htmlFor="firstName">First Name</label>
-                      <input
-                        id="firstName"
-                        type="text"
-                        {...formik.getFieldProps('firstName')} />
-                      {formik.touched.firstName && formik.errors.firstName ? <div>{formik.errors.firstName}</div> : null}
-                    </div>
-
-                    {/* Last Name */}
-                    <div className="horizontal-box">
-                    <label htmlFor="lastName">Last Name</label>
-                    <input
-                      id="lastName"
-                      type="text"
-                      {...formik.getFieldProps('lastName')} />
-                    {formik.touched.lastName && formik.errors.lastName ? <div>{formik.errors.lastName}</div> : null}
-                    </div>
-
-                    {/* Year */}
-                    <div className="horizontal-box">
-                    <label htmlFor="graduationYear">Graduation Year</label>
-                    <select className="dropbtn" name="year" value={year} onChange={(event) => { setYear(event.target.value) }}>
-                      <option value="" disabled={true}>Choose your graduation year:</option>
-                      <option value={"2023"}>2023</option>
-                      <option value={"2024"}>2024</option>
-                      <option value={"2025"}>2025</option>
-                      <option value={"2026"}>2026</option>
-                    </select>
-                    </div>
-
-                    <div className="horizontal-box">
-                    {/* Major */}
-                    <label htmlFor="major">Major</label>
-                    <input
-                      id="major"
-                      type="text"
-                      {...formik.getFieldProps('major')} />
-                    {formik.touched.major && formik.errors.major ? <div>{formik.errors.major}</div> : null}
-                    </div>
-
-                    <div className="horizontal-box">
-                    {/* Gender */}
-                    <label htmlFor="gender">Gender</label>
-                    <select className="dropbtn" name="gender" value={gender} onChange={(event) => { setGender(event.target.value) }}>
-                      <option value="" disabled={true}>Please select: </option>
-                      <option value={"Male"}>Male</option>
-                      <option value={"Female"}>Female</option>
-                      <option value={"Other"}>Other</option>
-                    </select>
-
-                    <label htmlFor="gender">(If selected 'Other,' please specify below:)</label>
-                    <input
-                      id="gender"
-                      type="text"
-                      {...formik.getFieldProps('gender')} />
-                    </div>
-
-                    {/* Desired Roles */}
-                    <div className="horizontal-box">
-                      <RoleSelector id='desiredRoles' roles={role} setRoles={setRole} />
-                    </div>
-                    {formik.errors.desiredRoles ? <div>{formik.errors.desiredRoles}</div> : null}
-
-                    {/* Resume Upload */}
-                    <div className="horizontal-box">
-                    <label htmlFor="resume">Resume / CV</label>
-                    <input
-                      type='file'
-                      accept='application/pdf'
-                      onChange={saveResume}
-                    />
-                    </div>
-
-                    {/* Long Answer 1 */}
-                    <div className="horizontal-box">
-                    <label htmlFor="answer1">There are many technology organization on campus;<br />what inspires you to join PlexTech?</label>
-                    <p>(~300 words)</p>
-                    <textarea
-                      id='answer1'
-                      type='text'
-                      {...formik.getFieldProps('answer1')} />
-                    {formik.touched.answer1 && formik.errors.answer1 ? <div>{formik.errors.answer1}</div> : null}
+              onSubmit={async (values) => {
+                if (gender === '') {
+                  setGender(values.gender);
+                }
+                await fetch('https://plextech-application-backend-production.up.railway.app/add_applicant', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                  },
+                  body: JSON.stringify({
+                    first_name: values.firstName,
+                    last_name: values.lastName,
+                    time_created: values.timestamp,
+                    desired_roles: values.desiredRoles,
+                    resume: resume,
+                    answer1: values.answer1,
+                    answer2: values.answer2,
+                    commitments: values.commitments,
+                    year: year,
+                    major: values.major,
+                    gender: gender,
+                    assigned_to: [],
+                    graded_by: [],
+                  })
+                }).then(() => {
+                  navigate('/success');
+                });
+              }}
+            >
+              {formik => (
+                <div className='application-form'>
+                  <span>
+                    <div style={{ justifyContent: "right", display: "flex" }}>
+                      <div>
+                        <Button style={{
+                          "display": "flex", "font-family": "DM Sans",
+                        }}
+                          variant="contained"
+                          color="neutral"
+                          onClick={navToHome}
+                          className="navHome">Return Home</Button>
+                      </div>
 
                     </div>
 
-                    {/* Long Answer 2 */}
-                    <div className="horizontal-box">
-                    <label htmlFor="answer1">Tell us a story that best captures you as a person.</label>
-                    <p>(~300 words)</p>
-                    <textarea
-                      id='answer2'
-                      type='text'
-                      {...formik.getFieldProps('answer2')} />
-                    {formik.touched.answer2 && formik.errors.answer2 ? <div>{formik.errors.answer2}</div> : null}
+
+
+                  </span>
+
+                  <div>
+                    <div className="title-headers">
+                    <img src={PlexTechLogo} alt="react logo" style={{ width: '80px', }}/>
+                      <h1>PlexTech Application - Spring 2023</h1>
+
+                      <br />
+                      <h4>Thank you for your interest in PlexTech! Please fill out the information below and we will get back to you soon. </h4>
                     </div>
 
-                    {/* EC Commitments */}
-                    <div className="horizontal-box">
-                    <label htmlFor="commitments">Please tell us about your commitments.</label>
-                    <p>(Example: CS61A: xx hours)</p>
-                    <textarea
-                      id='commitments'
-                      type='text'
-                      {...formik.getFieldProps('commitments')} />
-                    {formik.touched.commitments && formik.errors.commitments ? <div>{formik.errors.commitments}</div> : null}
-                    </div>
 
-                    {/* Timestamp */}
-                    <div className="horizontal-box">
-                    <label htmlFor="timestamp">Your Application ID</label>
-                    <p>Please save this ID and refer to it should you need to contact us regarding your application.</p>
-                    <input
-                      id="timestamp"
-                      name="timestamp"
-                      type="text"
-                      readOnly
-                      value={formik.values.timestamp} />
-                    </div>
+                    <form onSubmit={formik.handleSubmit}>
 
-                    {/* Submit Button */}
-                    <div>
-                      <Button type="submit"
-                        variant="contained"
-                        color="neutral"
-                        fontWeight="Bold"
-                        style={{ "marginBottom": "50px" }}
-                      >Submit</Button>
-                    </div>
-                    <p className="copyright">Copyright © 2022 PlexTech All Rights Reserved.</p>
-                  </form>
+                      {/* First Name */}
+                      <div className="horizontal-box">
+                        <label htmlFor="firstName">First Name</label>
+                        <input
+                          id="firstName"
+                          type="text"
+                          {...formik.getFieldProps('firstName')} />
+                        {formik.touched.firstName && formik.errors.firstName ? <div>{formik.errors.firstName}</div> : null}
+                      </div>
+
+                      {/* Last Name */}
+                      <div className="horizontal-box">
+                        <label htmlFor="lastName">Last Name</label>
+                        <input
+                          id="lastName"
+                          type="text"
+                          {...formik.getFieldProps('lastName')} />
+                        {formik.touched.lastName && formik.errors.lastName ? <div>{formik.errors.lastName}</div> : null}
+                      </div>
+
+                      {/* Year */}
+                      <div className="horizontal-box">
+                        <label htmlFor="graduationYear">Graduation Year</label>
+                        <select className="dropbtn" name="year" value={year} onChange={(event) => { setYear(event.target.value) }}>
+                          <option value="" disabled={true}>Choose your graduation year:</option>
+                          <option value={"2023"}>2023</option>
+                          <option value={"2024"}>2024</option>
+                          <option value={"2025"}>2025</option>
+                          <option value={"2026"}>2026</option>
+                        </select>
+                      </div>
+
+                      <div className="horizontal-box">
+                        {/* Major */}
+                        <label htmlFor="major">Major</label>
+                        <input
+                          id="major"
+                          type="text"
+                          {...formik.getFieldProps('major')} />
+                        {formik.touched.major && formik.errors.major ? <div>{formik.errors.major}</div> : null}
+                      </div>
+
+                      <div className="horizontal-box">
+                        {/* Gender */}
+                        <label htmlFor="gender">Gender</label>
+                        <select className="dropbtn" name="gender" value={gender} onChange={(event) => { setGender(event.target.value) }}>
+                          <option value="" disabled={true}>Please select: </option>
+                          <option value={"Male"}>Male</option>
+                          <option value={"Female"}>Female</option>
+                          <option value={"Other"}>Other</option>
+                        </select>
+
+                        <label htmlFor="gender">(If selected 'Other,' please specify below:)</label>
+                        <input
+                          id="gender"
+                          type="text"
+                          {...formik.getFieldProps('gender')} />
+                      </div>
+
+                      {/* Desired Roles */}
+                      <div className="horizontal-box">
+                        <RoleSelector id='desiredRoles' roles={role} setRoles={setRole} />
+                      </div>
+                      {formik.errors.desiredRoles ? <div>{formik.errors.desiredRoles}</div> : null}
+
+                      {/* Resume Upload */}
+                      <div className="horizontal-box">
+                        <label htmlFor="resume">Resume / CV</label>
+                        <input
+
+                          type='file'
+                          accept='application/pdf'
+                          onChange={saveResume}
+                        />
+                      </div>
+
+                      {/* Long Answer 1 */}
+                      <div className="horizontal-box">
+                        <label htmlFor="answer1">There are many technology organization on campus;<br />what inspires you to join PlexTech?</label>
+                        <p>(~300 words)</p>
+                        <textarea
+                          id='answer1'
+                          type='text'
+                          {...formik.getFieldProps('answer1')} />
+                        {formik.touched.answer1 && formik.errors.answer1 ? <div>{formik.errors.answer1}</div> : null}
+
+                      </div>
+
+                      {/* Long Answer 2 */}
+                      <div className="horizontal-box">
+                        <label htmlFor="answer1">Tell us a story that best captures you as a person.</label>
+                        <p>(~300 words)</p>
+                        <textarea
+                          id='answer2'
+                          type='text'
+                          {...formik.getFieldProps('answer2')} />
+                        {formik.touched.answer2 && formik.errors.answer2 ? <div>{formik.errors.answer2}</div> : null}
+                      </div>
+
+                      {/* EC Commitments */}
+                      <div className="horizontal-box">
+                        <label htmlFor="commitments">Please tell us about your commitments.</label>
+                        <p>(Example: CS61A: xx hours)</p>
+                        <textarea
+                          id='commitments'
+                          type='text'
+                          {...formik.getFieldProps('commitments')} />
+                        {formik.touched.commitments && formik.errors.commitments ? <div>{formik.errors.commitments}</div> : null}
+                      </div>
+
+                      {/* Timestamp */}
+                      <div className="horizontal-box">
+                        <label htmlFor="timestamp">Your Application ID</label>
+                        <p>Please save this ID and refer to it should you need to contact us regarding your application.</p>
+                        <input
+                          id="timestamp"
+                          name="timestamp"
+                          type="text"
+                          readOnly
+                          value={formik.values.timestamp} />
+                      </div>
+
+                      {/* Submit Button */}
+                      <div>
+                        <Button type="submit"
+                          variant="contained"
+                          color="neutral"
+                          fontWeight="Bold"
+                          style={{ "marginBottom": "50px" }}
+                        >Submit</Button>
+                      </div>
+                      <p className="copyright">Copyright © 2022 PlexTech All Rights Reserved.</p>
+                    </form>
+                  </div>
                 </div>
-              </div>
-            )}
-          </Formik>
-        </ThemeProvider>
-        <img src={illustration} className='image'></img>
+              )}
+            </Formik>
+          </ThemeProvider>
+        </div>
+
+        {/* <img src={illustration} className='image'></img> */}
       </div>
     </>
   );
 };
 
-export default ApplicationForm;  
+export default ApplicationForm;

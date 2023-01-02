@@ -9,7 +9,7 @@ function Home() {
     const navToApplication = () => {
         navigate("/apply");
     }
-    
+
     const navToGrading = () => {
         navigate("/member-login");
     }
@@ -19,7 +19,7 @@ function Home() {
     }
 
     return (
-        <div>
+        <div className="home-container">
             <h1>Welcome to the PlexTech Application Platform.</h1>
             <h4>If you are an applicant, please proceed to the application form.</h4>
             <div className="home">

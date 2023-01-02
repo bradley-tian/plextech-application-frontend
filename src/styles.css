@@ -1,11 +1,14 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap");
+
 html {
   font-size: 16px;
-  font-family: -apple-system, BlinkMacSystemFont, "avenir next", avenir,
-    "helvetica neue", helvetica, ubuntu, roboto, noto, "segoe ui", arial,
-    sans-serif;
+  font-family: "DM Sans", sans-serif !important;
   margin: 0;
   padding: 0;
   text-decoration-skip-ink: "auto";
+  background-image: url("shapes-background.png");
+
+
 }
 
 html,
@@ -33,13 +36,14 @@ body {
 body {
   padding: 0;
   margin: calc((100vh / 25) * 1.563) calc((100vw / 25) * 1.563);
-  background-image: linear-gradient(135deg, var(--pt-red), var(--pt-orange), var(--pt-ochre));
   background-size: 500% 500%, cover;
   background-repeat: no-repeat;
   font-weight: 400;
   height: 100%;
   line-height: 1.563;
-  color: white;
+  /* color: white; */
+  color: grey;
+
   caret-color: white;
 }
 
@@ -54,7 +58,8 @@ h6 {
   margin-bottom: 1rem;
   margin-top: 1em;
   font-weight: bold;
-  text-shadow: 0px 2px 1px #A85d02;
+  color: black;
+  /* text-shadow: 0px 2px 1px #A85d02; */
 }
 
 h1 {
@@ -79,6 +84,9 @@ h4 {
   font-size: 1.563rem;
   letter-spacing: -0.06rem;
   line-height: 1.3;
+  font-weight: 50;
+  color: grey;
+
 }
 
 h5 {
@@ -127,7 +135,7 @@ input[type='textarea'],
 #roles {
   padding: 0.65rem 0.5rem;
   font-size: 1rem;
-  border: 2px solid var(--gray-100);
+  border: 1px solid #b7b7b7;
   background-color: transparent;
   color: var(--gray-100);
   box-shadow: 0px, 2px, 1px, #A85d02;
@@ -147,8 +155,6 @@ button {
   padding: 0.5rem 1.25rem;
   font-size: 1rem;
   border-radius: 10px;
-  background-color: var(--gray-700);
-  border: 2px solid var(--gray-700);
   color: black;
   text-decoration: none;
   font-weight: bold;
@@ -163,6 +169,11 @@ button {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   user-select: none;
+  font-family: "DM Sans", sans-serif !important;
+  background-color: white;
+  border: 2px solid rgb(217, 217, 217);
+
+
 }
 
 @media (prefers-color-scheme: dark) {
@@ -232,6 +243,9 @@ abbr {
   }
 }
 
+
+
+
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed !important;
@@ -284,14 +298,24 @@ button[type="submit"] {
   margin-top: 1rem;
 }
 
-.navHome {
-  position: absolute;
-  left: 85%;
+.title-headers {
+  text-align: center;
 }
+
+
 
 .home {
   padding-top: 15px;
   padding-left: 15px;
+}
+
+.home-container {
+  background-color: white;
+  border-radius: 40px;
+  padding: 30px;
+  padding-top: 15px;
+  border: 1px solid #b7b7b7;
+
 }
 
 .first {
@@ -321,6 +345,43 @@ input[type=file]::-webkit-file-upload-button {
 .application-form {
   position: absolute;
   z-index: 1;
+  width: 57%;
+  min-width: 700px;
+  margin-left: -28.5%;
+  background-color: white;
+
+  padding: 40px;
+  left: 50%;
+  border-radius: 40px;
+  box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 1200px) {
+  .application-form {
+    width: 48%;
+    min-width: 400px;
+    margin-left: -30%;
+
+  }
+  /* .navHome {
+
+    margin-left: -30px;
+
+  } */
+}
+
+@media (max-width: 750px) {
+  .application-form {
+    width: 48%;
+    min-width: 400px;
+    margin-left: -40%;
+
+  }
+  .navHome {
+
+    margin-left: -58px;
+
+  }
 }
 
 .image {
@@ -333,15 +394,17 @@ input[type=file]::-webkit-file-upload-button {
   top: 50%;
 }
 
-select, textarea {
+select,
+textarea {
   padding: 0.65rem;
   font-size: 1rem;
-  font-family: -apple-system, BlinkMacSystemFont, "avenir next", avenir,
-  "helvetica neue", helvetica, ubuntu, roboto, noto, "segoe ui", arial,
-  sans-serif;
-  border: 2px solid var(--gray-100);
+  /* font-family: -apple-system, BlinkMacSystemFont, "avenir next", avenir,
+    "helvetica neue", helvetica, ubuntu, roboto, noto, "segoe ui", arial,
+    sans-serif; */
+  font-family: "DM Sans", sans-serif !important;
+  width: 40%;
   background-color: transparent;
-  color: var(--gray-100);
+  border: 1px solid #b7b7b7;
   box-shadow: 0px, 2px, 1px, #A85d02;
   border-radius: 5px;
   overflow-wrap: break-word;
@@ -353,6 +416,7 @@ textarea {
   width: 60%;
   height: 8rem;
 }
+
 .horizontal-box {
   margin-bottom: 3rem;
 }
@@ -360,4 +424,9 @@ textarea {
 iframe {
   width: 100%;
   height: 50rem;
+}
+
+input[type='file'] {
+  font-family: "DM Sans", sans-serif !important;
+
 }
