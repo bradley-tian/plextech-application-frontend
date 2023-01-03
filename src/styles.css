@@ -7,8 +7,6 @@ html {
   padding: 0;
   text-decoration-skip-ink: "auto";
   background-image: url("shapes-background.png");
-
-
 }
 
 html,
@@ -343,7 +341,7 @@ input[type=file]::-webkit-file-upload-button {
   margin-bottom: 1rem;
 }
 
-.application-form {
+.form-field {
   position: absolute;
   z-index: 1;
   width: 57%;
@@ -358,21 +356,16 @@ input[type=file]::-webkit-file-upload-button {
 }
 
 @media (max-width: 1200px) {
-  .application-form {
+  .form-field {
     width: 48%;
     min-width: 400px;
     margin-left: -30%;
 
   }
-  /* .navHome {
-
-    margin-left: -30px;
-
-  } */
 }
 
 @media (max-width: 750px) {
-  .application-form {
+  .form-field {
     width: 48%;
     min-width: 400px;
     margin-left: -40%;
@@ -399,9 +392,6 @@ select,
 textarea {
   padding: 0.65rem;
   font-size: 1rem;
-  /* font-family: -apple-system, BlinkMacSystemFont, "avenir next", avenir,
-    "helvetica neue", helvetica, ubuntu, roboto, noto, "segoe ui", arial,
-    sans-serif; */
   font-family: "DM Sans", sans-serif !important;
   width: 40%;
   background-color: transparent;
@@ -429,5 +419,8 @@ iframe {
 
 input[type='file'] {
   font-family: "DM Sans", sans-serif !important;
+}
 
+#signInDiv {
+  margin-bottom: 3rem;
 }

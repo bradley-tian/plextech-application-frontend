@@ -182,7 +182,7 @@ const ApplicationForm = () => {
               }}
             >
               {formik => (
-                <div className='application-form'>
+                <div className='form-field'>
                   <span>
                     <div style={{ justifyContent: "right", display: "flex" }}>
                       <div>

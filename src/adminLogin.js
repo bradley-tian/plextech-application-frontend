@@ -66,18 +66,20 @@ function AdminLoginPage() {
     return (
         <>
             <ThemeProvider theme={theme}>
-                <div>
-                    <h2>This is an admin-only page.</h2>
-                    <h4>Please log in first to continue.</h4>
-                </div>
-                <div id="signInDiv"></div>
-                <Button style={{ "display": "flex" }}
-                    variant="contained"
-                    color="neutral"
-                    onClick={() => { navigate('/') }}
-                    className="navHome">Return Home</Button>
-                <div>
-                    <p>{loginMessage}</p>
+                <div className='form-field'>
+                    <div>
+                        <h2>This is an admin-only page.</h2>
+                        <h4>Please log in first to continue.</h4>
+                    </div>
+                    <div id="signInDiv"></div>
+                    <Button style={{ "display": "flex" }}
+                        variant="contained"
+                        color="neutral"
+                        onClick={() => { navigate('/') }}
+                        className="navHome">Return Home</Button>
+                    <div>
+                        <p>{loginMessage}</p>
+                    </div>
                 </div>
             </ThemeProvider>
         </>

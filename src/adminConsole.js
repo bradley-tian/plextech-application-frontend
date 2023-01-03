@@ -14,6 +14,7 @@ function AdminConsole() {
     const [CSVMessage, setCSVMessage] = useState("");
     const [graders, setGraders] = useState([]);
     const [action1, setAction1] = useState('add');
+    const [results, setResults] = useState([])
 
     const theme = createTheme({
         status: {
@@ -76,6 +77,9 @@ function AdminConsole() {
         }
 
         fetchGraderData();
+        loadAnalytics();
+        getResults();
+        loadResultAnalytics();
     }, []);
 
     useEffect(() => {
@@ -93,21 +97,22 @@ function AdminConsole() {
         other: "N/A",
     })
 
-    function Analytics() {
-        async function loadAnalytics() {
-            await fetch("https://plextech-application-backend-production.up.railway.app/analytics", {
-                method: 'GET',
+    async function loadAnalytics() {
+        await fetch("https://plextech-application-backend-production.up.railway.app/analytics", {
+            method: 'GET',
+        })
+            .then((response) => {
+                return (response.json());
             })
-                .then((response) => {
-                    return (response.json());
-                })
-                .then((data) => {
-                    setAnalyticData(data);
-                })
-                .catch((err) => {
-                    console.log(err.message);
-                });
-        }
+            .then((data) => {
+                setAnalyticData(data);
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
+    }
+
+    function Analytics() {
 
         return (
             <>
@@ -127,29 +132,29 @@ function AdminConsole() {
                     color="neutral"
                     onClick={loadAnalytics}
                     className="loadAnalytics"
-                >Load Analytics</Button>
+                >Refresh Analytics</Button>
             </>
         )
     }
 
     const [assignments, setAssignments] = useState({})
 
-    function Assignment() {
-
-        async function assignGraders() {
-            await fetch("https://plextech-application-backend-production.up.railway.app/assign_graders", {
-                method: 'GET',
+    async function assignGraders() {
+        await fetch("https://plextech-application-backend-production.up.railway.app/assign_graders", {
+            method: 'GET',
+        })
+            .then((response) => {
+                return (response.json());
             })
-                .then((response) => {
-                    return (response.json());
-                })
-                .then((data) => {
-                    setAssignments(data);
-                })
-                .catch((err) => {
-                    console.log(err.message);
-                });
-        }
+            .then((data) => {
+                setAssignments(data);
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
+    }
+
+    function Assignment() {
 
         return (
             <>
@@ -180,38 +185,41 @@ function AdminConsole() {
         );
     }
 
-    function Results() {
-
-        let csvURL = '';
-        async function exportResults() {
-            await fetch('https://plextech-application-backend-production.up.railway.app/export_results', {
-                method: 'GET',
+    async function getResults() {
+        await fetch('https://plextech-application-backend-production.up.railway.app/export_results', {
+            method: 'GET',
+        })
+            .then((response) => {
+                return (response.json());
             })
-                .then((response) => {
-                    return (response.json());
-                })
-                .then((data) => {
-                    if (data.length === 0) {
-                        setCSVMessage("There are currently no reviews.");
-                    } else {
-                        const options = {
-                            fieldSeparator: ',',
-                            quoteStrings: '"',
-                            decimalSeparator: '.',
-                            showLabels: true,
-                            showTitle: true,
-                            title: 'Grading Results',
-                            useTextFile: false,
-                            useBom: true,
-                        };
-                        const csvExport = new ExportToCsv(options);
-                        csvExport.generateCsv(data);
-                    }
-                })
-                .catch((err) => {
-                    console.log(err.message);
-                });
-        }
+            .then((data) => {
+                if (data.length === 0) {
+                    setCSVMessage("There are currently no reviews.");
+                } else {
+                    setResults(data)
+                }
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
+    }
+
+    function exportResults() {
+        const options = {
+            fieldSeparator: ',',
+            quoteStrings: '"',
+            decimalSeparator: '.',
+            showLabels: true,
+            showTitle: true,
+            title: 'Grading Results',
+            useTextFile: false,
+            useBom: true,
+        };
+        const csvExport = new ExportToCsv(options);
+        csvExport.generateCsv(results);
+    }
+
+    function Results() {
         return (
             <>
                 <Button
@@ -220,7 +228,6 @@ function AdminConsole() {
                     color="neutral"
                     onClick={exportResults}
                     className="exportResults"
-                    href={csvURL}
                     download
                 >Export Results as CSV File</Button>
                 <p>{CSVMessage}</p>
@@ -228,111 +235,183 @@ function AdminConsole() {
         )
     }
 
+    const [resultAnalytics, setResultAnalytics] = useState({});
+
+    function loadResultAnalytics() {
+        const reviews = results.slice(1);
+
+        const judgments = {};
+        for (let grader of graders) {
+            judgments[grader[1]] = {
+                'rating0': [0],
+                'rating1': [0],
+                'rating2': [0],
+                'rating3': [0],
+            };
+        }
+
+        for (let review of reviews) {
+            judgments[review['grader']]['rating0'].push(parseInt(review['rating0']));
+            judgments[review['grader']]['rating1'].push(parseInt(review['rating1']));
+            judgments[review['grader']]['rating2'].push(parseInt(review['rating2']));
+            judgments[review['grader']]['rating3'].push(parseInt(review['rating3']));
+        }
+
+        for (let g of Object.keys(judgments)) {
+            const count = judgments[g]['rating0'].length - 1
+            judgments[g]['rating0'] = (judgments[g]['rating0'].reduce((a, b) => a + b) / count).toFixed(2);
+            judgments[g]['rating1'] = (judgments[g]['rating1'].reduce((a, b) => a + b) / count).toFixed(2);
+            judgments[g]['rating2'] = (judgments[g]['rating2'].reduce((a, b) => a + b) / count).toFixed(2);
+            judgments[g]['rating3'] = (judgments[g]['rating3'].reduce((a, b) => a + b) / count).toFixed(2);
+        }
+
+        setResultAnalytics(judgments);
+    }
+
+    function ResultsAnalytics() {
+
+        const keys = ['rating0', 'rating1', 'rating2', 'rating3'];
+
+        return (
+            <>
+                <h4>Grader Rating Averages</h4>
+                <div>
+
+                    {keys.map(key => {
+                        return (
+                            <div>
+                                <h6>{key}</h6>
+                                <ul>
+                                    {Object.keys(resultAnalytics).map(grader => (
+                                        <li>{grader}: {resultAnalytics[grader][key]}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        );
+                    })}
+                </div>
+                <Button
+                    style={{ display: "flex" }}
+                    variant="contained"
+                    color="neutral"
+                    onClick={loadResultAnalytics}
+                    className="loadResultAnalytics"
+                >Refresh Results Analytics</Button>
+            </>
+        )
+    }
     return (
         <>
             <ThemeProvider theme={theme}>
-                <span>
-                    <Button
-                        style={{ display: "flex" }}
-                        variant="contained"
-                        color="neutral"
-                        onClick={() => { navigate('/') }}
-                        className="navHome"
-                    >Return Home</Button>
+                <div className='form-field'>
+                    <span>
+                        <Button
+                            style={{ display: "flex" }}
+                            variant="contained"
+                            color="neutral"
+                            onClick={() => { navigate('/') }}
+                            className="navHome"
+                        >Return Home</Button>
 
-                    <h1 style={{ display: "flex" }}>
-                        PlexTech Administrator Console
-                    </h1>
-                </span>
+                        <h1 style={{ display: "flex" }}>
+                            PlexTech Administrator Console
+                        </h1>
+                    </span>
 
-                {/* Grader Control */}
-                <Formik
-                    initialValues={{
-                        email: "",
-                    }}
-                    onSubmit={async (values) => {
-                        if (action1 === "add") {
-                            await fetch('https://plextech-application-backend-production.up.railway.app/add_grader', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({
-                                    email: values.email,
-                                })
-                            }).then(() => {
-                                setGraderMessage("Successfully added grader " + values.email + ".")
-                            });
-                        } else if (action1 === "remove") {
-                            await fetch('https://plextech-application-backend-production.up.railway.app/remove_grader', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({
-                                    email: values.email,
-                                })
-                            }).then(() => {
-                                setGraderMessage("Successfully removed grader " + values.email + ".")
-                            });
-                        }
-                    }}
-                >
-                    {formik => (
-                        <div className='admin-console'>
-                            <div>
-                                <h2>Grader Control</h2>
-                                <h4>Current Graders:</h4>
-                                <ul>
-                                    {
-                                        graders.map(grader => {
-                                            return (
-                                                <li key={grader[0]}>{grader[1]}</li>
-                                            )
-                                        })
-                                    }
-                                </ul>
-                                <p>{graderMessage}</p>
+                    {/* Grader Control */}
+                    <Formik
+                        initialValues={{
+                            email: "",
+                        }}
+                        onSubmit={async (values) => {
+                            if (action1 === "add") {
+                                await fetch('https://plextech-application-backend-production.up.railway.app/add_grader', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({
+                                        email: values.email,
+                                    })
+                                }).then(() => {
+                                    setGraderMessage("Successfully added grader " + values.email + ".")
+                                });
+                            } else if (action1 === "remove") {
+                                await fetch('https://plextech-application-backend-production.up.railway.app/remove_grader', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({
+                                        email: values.email,
+                                    })
+                                }).then(() => {
+                                    setGraderMessage("Successfully removed grader " + values.email + ".")
+                                });
+                            }
+                        }}
+                    >
+                        {formik => (
+                            <div className='admin-console'>
+                                <div>
+                                    <h2>Grader Control</h2>
+                                    <h4>Current Graders:</h4>
+                                    <ul>
+                                        {
+                                            graders.map(grader => {
+                                                return (
+                                                    <li key={grader[0]}>{grader[1]}</li>
+                                                )
+                                            })
+                                        }
+                                    </ul>
+                                    <p>{graderMessage}</p>
 
-                                <form onSubmit={formik.handleSubmit}>
-                                    <label htmlFor="lastName">Grader Email</label>
-                                    <input
-                                        id="email"
-                                        type="text"
-                                        {...formik.getFieldProps('email')} />
+                                    <form onSubmit={formik.handleSubmit}>
+                                        <label htmlFor="lastName">Grader Email</label>
+                                        <input
+                                            id="email"
+                                            type="text"
+                                            {...formik.getFieldProps('email')} />
 
-                                    <label htmlFor="rating1">
-                                        What do you want to do with this grader?
-                                    </label>
-                                    <select className="dropbtn" name="action1" value={action1} onChange={(event) => { setAction1(event.target.value) }}>
-                                        <option value="" disabled={true}>Select an action:</option>
-                                        <option value="add">add grader</option>
-                                        <option value="remove">remove grader</option>
-                                    </select>
-                                    <div style={{ marginTop: '2rem' }}>
-                                        <Button type="submit"
-                                            variant="contained"
-                                            color="neutral"
-                                            fontWeight="Bold"
-                                            style={{ "marginBottom": "50px" }}
-                                        >Submit</Button>
-                                    </div>
-                                </form>
+                                        <label htmlFor="rating1">
+                                            What do you want to do with this grader?
+                                        </label>
+                                        <select className="dropbtn" name="action1" value={action1} onChange={(event) => { setAction1(event.target.value) }}>
+                                            <option value="" disabled={true}>Select an action:</option>
+                                            <option value="add">add grader</option>
+                                            <option value="remove">remove grader</option>
+                                        </select>
+                                        <div style={{ marginTop: '2rem' }}>
+                                            <Button type="submit"
+                                                variant="contained"
+                                                color="neutral"
+                                                fontWeight="Bold"
+                                                style={{ "marginBottom": "50px" }}
+                                            >Submit</Button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
-                        </div>
-                    )}
-                </Formik>
+                        )}
+                    </Formik>
 
-                <div className='horizontal-box'>
-                    <h2>Application Analytics</h2>
-                    <Analytics />
-                </div>
+                    <div className='horizontal-box'>
+                        <h2>Application Analytics</h2>
+                        <Analytics />
+                    </div>
 
-                <div className='horizontal-box'>
-                    <h2>Grader Assignment Control</h2>
-                    <p>Note: Please ensure that all graders are finalized before performing this action.</p>
-                    <Assignment />
-                </div>
+                    <div className='horizontal-box'>
+                        <h2>Grader Assignment Control</h2>
+                        <p>Note: Please ensure that all graders are finalized before performing this action.</p>
+                        <Assignment />
+                    </div>
 
-                <div className='horizontal-box'>
-                    <h2>Grading Results</h2>
-                    <Results />
+                    <div className='horizontal-box'>
+                        <h2>Grading Results</h2>
+                        <Results />
+                    </div>
+
+                    <div className='horizontal-box'>
+                        <h2>Result Analytics</h2>
+                        <ResultsAnalytics />
+                    </div>
                 </div>
                 <br />
             </ThemeProvider>

@@ -24,15 +24,17 @@ function CompletionPage() {
     return (
         <>
             <ThemeProvider theme={theme}>
-                <div>
-                    <h2>Good work!</h2>
-                    <h4>You have finished grading your assigned portion.</h4>
+                <div className='form-field'>
+                    <div>
+                        <h2>Good work!</h2>
+                        <h4>You have finished grading your assigned portion.</h4>
+                    </div>
+                    <Button style={{ "display": "flex" }}
+                        variant="contained"
+                        color="neutral"
+                        onClick={() => { navigate('/') }}
+                        className="navHome">Return Home</Button>
                 </div>
-                <Button style={{ "display": "flex" }}
-                    variant="contained"
-                    color="neutral"
-                    onClick={() => {navigate('/')}}
-                    className="navHome">Return Home</Button>
             </ThemeProvider>
 
         </>

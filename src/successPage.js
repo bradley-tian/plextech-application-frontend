@@ -24,15 +24,17 @@ function SuccessPage() {
     return (
         <>
             <ThemeProvider theme={theme}>
-                <div>
-                    <h2>Thank you for your applying to PlexTech!</h2>
-                    <h4>We will reach out to you very soon.</h4>
+                <div className='form-field'>
+                    <div>
+                        <h2>Thank you for your applying to PlexTech!</h2>
+                        <h4>We will reach out to you very soon.</h4>
+                    </div>
+                    <Button style={{ "display": "flex" }}
+                        variant="contained"
+                        color="neutral"
+                        onClick={() => { navigate('/') }}
+                        className="navHome">Return Home</Button>
                 </div>
-                <Button style={{ "display": "flex" }}
-                    variant="contained"
-                    color="neutral"
-                    onClick={() => {navigate('/')}}
-                    className="navHome">Return Home</Button>
             </ThemeProvider>
 
         </>
