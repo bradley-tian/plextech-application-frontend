@@ -424,3 +424,10 @@ input[type='file'] {
 #signInDiv {
   margin-bottom: 3rem;
 }
+
+footer {
+  align-items: center;
+  display: block;
+  position: absolute;
+  top: 90%;
+}

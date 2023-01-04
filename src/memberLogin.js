@@ -66,7 +66,7 @@ function MemberLoginPage() {
     return (
         <>
             <ThemeProvider theme={theme}>
-                <div className='form-field'>
+                <div className='form'>
                     <div>
                         <h2>This is a member-only page.</h2>
                         <h4>Please log in first to continue.</h4>
