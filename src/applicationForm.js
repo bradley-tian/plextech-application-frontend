@@ -66,7 +66,7 @@ function RoleSelector(props) {
   };
 
   return (
-    <FormControl id='roleSelector' sx={{ m: 1, width: 300 }}>
+    <FormControl id='roleSelector' sx={{ m: 1, width: '70%' }}>
       <label id="desiredRoles">Intended Roles</label>
       <Select
         labelId="roles"
@@ -194,7 +194,6 @@ const ApplicationForm = () => {
                           onClick={navToHome}
                           className="navHome">Return Home</Button>
                       </div>
-
                     </div>
 
 
@@ -282,7 +281,6 @@ const ApplicationForm = () => {
                       <div className="horizontal-box">
                         <label htmlFor="resume">Resume / CV</label>
                         <input
-
                           type='file'
                           accept='application/pdf'
                           onChange={saveResume}

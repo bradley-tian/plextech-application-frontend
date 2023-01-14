@@ -29,6 +29,9 @@ function Home() {
             primary: {
                 main: '#ff8a00',
             },
+            secondary: {
+                main: '#808080'
+            },
             neutral: {
                 main: '#ffffff',
                 contrastText: '#ff8a00',
@@ -40,13 +43,15 @@ function Home() {
         <>
             <ThemeProvider theme={theme}>
                 <div className="home-container">
-                    <h2 style={{display: 'inline-flex',}}>Welcome to the PlexTech Application Platform!</h2>
-                    <img src={PlexTechLogo} alt="plextech logo" style={{ display: 'inline-flex', width: '35px', left: '85%', top: '12%', position: 'absolute', }}/>
+                    <img src={PlexTechLogo} alt="plextech logo" style={{ display: 'block', width: '35px', left: '85%', top: '12%', }} />
+                    <h2 style={{ display: 'block' }}>Welcome to the PlexTech Application Platform!</h2>
                     <h4>If you are an applicant, please proceed to the application form.</h4>
                     <div className="home">
 
                         <Button style={{
-                            "font-family": "DM Sans",
+                            "fontFamily": "DM Sans",
+                            "marginBottom": "2rem",
+                            "display": "block",
                         }}
                             className='first'
                             onClick={navToApplication}
@@ -54,8 +59,29 @@ function Home() {
                             color="neutral"
                         >Application Form</Button>
 
-                        <button onClick={navToGrading}>Grading Interface</button>
-                        <button onClick={navToAdmin}>Admin Console</button>
+                        <Button style={{
+                            "fontFamily": "DM Sans",
+                            "marginBottom": "2rem",
+                            "display": "block",
+                            "marginRight": '0.5%',
+                        }}
+                            className='homeBtn'
+                            onClick={navToGrading}
+                            variant="outlined"
+                            color="secondary"
+                        >Grading Interface</Button>
+
+                        <Button style={{
+                            "fontFamily": "DM Sans",
+                            "marginBottom": "2rem",
+                            "display": "block",
+                            "marginRight": '0.5%',
+                        }}
+                            className='homeBtn'
+                            onClick={navToAdmin}
+                            variant="outlined"
+                            color="secondary"
+                        >Admin Console</Button>
                     </div>
                 </div>
             </ThemeProvider>

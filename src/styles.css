@@ -367,7 +367,7 @@ input[type=file]::-webkit-file-upload-button {
 @media (max-width: 750px) {
   .form-field {
     width: 48%;
-    min-width: 400px;
+    min-width: 250px;
     margin-left: -40%;
 
   }
@@ -419,6 +419,7 @@ iframe {
 
 input[type='file'] {
   font-family: "DM Sans", sans-serif !important;
+  width: 61%;
 }
 
 #signInDiv {
