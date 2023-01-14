@@ -300,6 +300,25 @@ function AdminConsole() {
             </>
         )
     }
+
+    const [adminKey, setAdminKey] = useState('');
+    const [flushMessage, setFlushMessage] = useState('');
+    async function flushDatabase() {
+        if (adminKey === 'plextechpermission') {
+            await fetch("https://plextech-application-backend-production.up.railway.app/flush_database", {
+            method: 'GET',
+        })
+            .then(() => {
+                setFlushMessage('Database successfully cleared.');
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
+        } else {
+            setFlushMessage('Incorrect admin key.')
+        }
+    }
+
     return (
         <>
             <ThemeProvider theme={theme}>
@@ -411,6 +430,25 @@ function AdminConsole() {
                     <div className='horizontal-box'>
                         <h2>Result Analytics</h2>
                         <ResultsAnalytics />
+                    </div>
+
+                    <div className="horizontal-box">
+                        <h2>DANGER: Database Operations</h2>
+                        <label>Enter admin key to proceed:</label>
+                        <input
+                        type='text'
+                        value={adminKey}
+                        onChange={(e) => setAdminKey(e.target.value)}
+                        style={{ marginBottom: "2rem" }}
+                        ></input>
+                        <Button
+                            style={{ display: "flex" }}
+                            variant="contained"
+                            color="neutral"
+                            onClick={flushDatabase}
+                            className="flushDatabase"
+                        >Flush Database</Button>
+                        <p>{flushMessage}</p>
                     </div>
                 </div>
                 <br />
