@@ -91,12 +91,15 @@ h5 {
   font-size: 1.25rem;
   letter-spacing: -0.03rem;
   line-height: 1.4;
+  color: grey;
 }
 
 h6 {
   font-size: 1rem;
   letter-spacing: 0;
   line-height: 1.5;
+  font-weight: 50;
+  color: grey;
 }
 
 p {
@@ -145,6 +148,7 @@ input[type='textarea'],
   word-wrap: break-word;
   word-break: break-all;
   overflow-wrap: break-word;
+  caret-color: var(--pt-orange);
 }
 
 input[type="submit"],
@@ -270,9 +274,8 @@ button[type="reset"]:hover {
 input[type="email"],
 input[type="text"],
 input[type="number"],
-input[type='textarea'],
 textarea {
-  width: 40%;
+  width: 17rem;
 }
 
 textarea {
@@ -281,7 +284,7 @@ textarea {
 }
 
 select {
-  width: 12%;
+  width: 12rem;
 }
 
 label {
@@ -327,6 +330,7 @@ button[type="submit"] {
 
 #roleSelector {
   margin-left: 0px;
+  width: 18.2rem;
 }
 
 input[type=file]::-webkit-file-upload-button {
@@ -360,7 +364,6 @@ input[type=file]::-webkit-file-upload-button {
     width: 48%;
     min-width: 400px;
     margin-left: -30%;
-
   }
 }
 
@@ -372,9 +375,7 @@ input[type=file]::-webkit-file-upload-button {
 
   }
   .navHome {
-
     margin-left: -58px;
-
   }
 }
 
@@ -393,7 +394,6 @@ textarea {
   padding: 0.65rem;
   font-size: 1rem;
   font-family: "DM Sans", sans-serif !important;
-  width: 40%;
   background-color: transparent;
   border: 1px solid #b7b7b7;
   box-shadow: 0px, 2px, 1px, #A85d02;
@@ -404,8 +404,9 @@ textarea {
 }
 
 textarea {
-  width: 60%;
+  width: 30rem;
   height: 8rem;
+  caret-color: var(--pt-orange);
 }
 
 .horizontal-box {
@@ -419,7 +420,7 @@ iframe {
 
 input[type='file'] {
   font-family: "DM Sans", sans-serif !important;
-  width: 61%;
+  width: 17rem;
 }
 
 #signInDiv {
@@ -431,4 +432,14 @@ footer {
   display: block;
   position: absolute;
   top: 90%;
+}
+
+@media (max-width: 750px) {
+  input[type="text"], input[type='file'], select, textarea {
+    width: 15rem;
+  }
+
+  #roleselector {
+    width: 15rem !important;
+  }
 }

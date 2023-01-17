@@ -4,9 +4,7 @@ import * as Yup from 'yup';
 import "./styles.css";
 import Button from '@mui/material/Button';
 import { useNavigate } from "react-router-dom";
-import illustration from './PlexFigure.png';
 import PlexTechLogo from './PlexTechLogo.png'
-
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
@@ -66,28 +64,32 @@ function RoleSelector(props) {
   };
 
   return (
-    <FormControl id='roleSelector' sx={{ m: 1, width: '70%' }}>
-      <label id="desiredRoles">Intended Roles</label>
-      <Select
-        labelId="roles"
-        id="roles"
-        multiple
-        value={props.roles}
-        onChange={handleChange}
-        input={<OutlinedInput label="Role" />}
-        MenuProps={MenuProps}
-      >
-        {roles.map((role) => (
-          <MenuItem
-            key={role}
-            value={role}
-            style={getStyles(role, roles, theme)}
-          >
-            {role}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
+    <>
+      <FormControl id='roleSelector' sx={{ m: 1, width: '70%' }}>
+        <label id="desiredRoles">Intended Roles (Select all that apply)</label>
+        <Select
+          labelId="roles"
+          id="roles"
+          multiple
+          value={props.roles}
+          onChange={handleChange}
+          input={<OutlinedInput label="Role" />}
+          MenuProps={MenuProps}
+        >
+          {roles.map((role) => (
+            <MenuItem
+              key={role}
+              value={role}
+              style={getStyles(role, roles, theme)}
+            >
+              {role}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </>
+
+
   );
 }
 
@@ -95,10 +97,12 @@ function RoleSelector(props) {
 const ApplicationForm = () => {
   const navigate = useNavigate();
   const [role, setRole] = React.useState([]);
-  const [resume, setResume] = React.useState();
+  const [resume, setResume] = React.useState('');
   const [year, setYear] = React.useState('2023');
   const [gender, setGender] = React.useState('');
   const [loadingMessage, setLoading] = React.useState('');
+  const [roleMessage, setRoleMessage] = React.useState('');
+  const [resumeMessage, setResumeMessage] = React.useState('');
 
   const getBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -112,7 +116,11 @@ const ApplicationForm = () => {
   async function saveResume(event) {
     const file = event.target.files[0];
     const base64 = await getBase64(file);
-    setResume(base64);
+    if (base64.length > 5242880) {
+      setResumeMessage('Max file size is 5MB.')
+    } else {
+      setResume(base64);
+    }
   }
 
   const navToHome = () => {
@@ -129,10 +137,12 @@ const ApplicationForm = () => {
               initialValues={{
                 firstName: '',
                 lastName: '',
+                email: '',
                 timestamp: Date.now(),
                 desiredRoles: [],
                 answer1: '',
                 answer2: '',
+                answer3: '',
                 commitments: '',
                 major: '',
                 gender: '',
@@ -142,43 +152,54 @@ const ApplicationForm = () => {
                   {
                     firstName: Yup.string().required('Required'),
                     lastName: Yup.string().required('Required'),
-                    desiredRoles: Yup.array().required('Required'),
-                    answer1: Yup.string().required('Required').max(2000, 'Response must not exceed 2000 characters.'),
-                    answer2: Yup.string().required('Required').max(2000, 'Response must not exceed 2000 characters.'),
+                    email: Yup.string().required('Required'),
+                    answer1: Yup.string().required('Required').max(1000, 'Response must not exceed 1000 characters.'),
+                    answer2: Yup.string().required('Required').max(1000, 'Response must not exceed 1000 characters.'),
+                    answer3: Yup.string().required('Required').max(1000, 'Response must not exceed 1000 characters.'),
                     commitments: Yup.string().required('Required'),
                     major: Yup.string().required('Required'),
                   }
                 )
               }
               onSubmit={async (values) => {
+                if (role.length === 0) {
+                  setRoleMessage('required')
+                }
+                if (resume.length === 0) {
+                  setResumeMessage('required')
+                }
                 if (gender === '') {
                   setGender(values.gender);
                 }
-                setLoading('Submitting your application; please wait...')
-                await fetch('https://plextech-application-backend-production.up.railway.app/add_applicant', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                  },
-                  body: JSON.stringify({
-                    first_name: values.firstName,
-                    last_name: values.lastName,
-                    time_created: values.timestamp,
-                    desired_roles: values.desiredRoles,
-                    resume: resume,
-                    answer1: values.answer1,
-                    answer2: values.answer2,
-                    commitments: values.commitments,
-                    year: year,
-                    major: values.major,
-                    gender: gender,
-                    assigned_to: [],
-                    graded_by: [],
-                  })
-                }).then(() => {
-                  navigate('/success');
-                });
+                else {
+                  setLoading('Submitting your application; please wait...')
+                  await fetch('https://plextech-application-backend-production.up.railway.app/add_applicant', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'Access-Control-Allow-Origin': '*',
+                    },
+                    body: JSON.stringify({
+                      first_name: values.firstName,
+                      last_name: values.lastName,
+                      email: values.email,
+                      time_created: values.timestamp,
+                      desired_roles: values.desiredRoles,
+                      resume: resume,
+                      answer1: values.answer1,
+                      answer2: values.answer2,
+                      answer3: values.answer3,
+                      commitments: values.commitments,
+                      year: year,
+                      major: values.major,
+                      gender: gender,
+                      assigned_to: [],
+                      graded_by: [],
+                    })
+                  }).then(() => {
+                    navigate('/success', { replace: true, state: { UID: values.timestamp } });
+                  });
+                }
               }}
             >
               {formik => (
@@ -187,7 +208,7 @@ const ApplicationForm = () => {
                     <div style={{ justifyContent: "right", display: "flex" }}>
                       <div>
                         <Button style={{
-                          "display": "flex", "font-family": "DM Sans",
+                          "display": "flex", "fontFamily": "DM Sans",
                         }}
                           variant="contained"
                           color="neutral"
@@ -202,11 +223,13 @@ const ApplicationForm = () => {
 
                   <div>
                     <div className="title-headers">
-                    <img src={PlexTechLogo} alt="react logo" style={{ width: '80px', }}/>
+                      <img src={PlexTechLogo} alt="react logo" style={{ width: '80px', }} />
                       <h1>PlexTech Application - Spring 2023</h1>
 
                       <br />
-                      <h4>Thank you for your interest in PlexTech! Please fill out the information below and we will get back to you soon. </h4>
+                      <h4>Thank you for your interest in PlexTech!<br />Please fill out the information below and we will get back to you soon. </h4>
+                      <p>All applications submitted are final; duplicates will not be accepted.</p>
+
                     </div>
 
 
@@ -230,6 +253,16 @@ const ApplicationForm = () => {
                           type="text"
                           {...formik.getFieldProps('lastName')} />
                         {formik.touched.lastName && formik.errors.lastName ? <div>{formik.errors.lastName}</div> : null}
+                      </div>
+
+                      {/* Email */}
+                      <div className="horizontal-box">
+                        <label htmlFor="email">Berkeley Email</label>
+                        <input
+                          id="email"
+                          type="text"
+                          {...formik.getFieldProps('email')} />
+                        {formik.touched.email && formik.errors.email ? <div>{formik.errors.email}</div> : null}
                       </div>
 
                       {/* Year */}
@@ -274,23 +307,25 @@ const ApplicationForm = () => {
                       {/* Desired Roles */}
                       <div className="horizontal-box">
                         <RoleSelector id='desiredRoles' roles={role} setRoles={setRole} />
+                        <p>{roleMessage}</p>
                       </div>
-                      {formik.errors.desiredRoles ? <div>{formik.errors.desiredRoles}</div> : null}
 
                       {/* Resume Upload */}
                       <div className="horizontal-box">
                         <label htmlFor="resume">Resume / CV</label>
+                        <p>Please limit your resume to one page.</p>
                         <input
                           type='file'
                           accept='application/pdf'
                           onChange={saveResume}
                         />
+                        <p>{resumeMessage}</p>
                       </div>
 
                       {/* Long Answer 1 */}
                       <div className="horizontal-box">
-                        <label htmlFor="answer1">There are many technology organization on campus;<br />what inspires you to join PlexTech?</label>
-                        <p>(~300 words)</p>
+                        <label htmlFor="answer1">Describe how you have taken advantage of a significant opportunity or worked to overcome a barrier you have faced.</label>
+                        <p>(~200 words)</p>
                         <textarea
                           id='answer1'
                           type='text'
@@ -301,8 +336,8 @@ const ApplicationForm = () => {
 
                       {/* Long Answer 2 */}
                       <div className="horizontal-box">
-                        <label htmlFor="answer1">Tell us a story that best captures you as a person.</label>
-                        <p>(~300 words)</p>
+                        <label htmlFor="answer2">Tell us about a community that’s especially important to you: how did you contribute to this community, and what makes it so inspiring? </label>
+                        <p>(~200 words)</p>
                         <textarea
                           id='answer2'
                           type='text'
@@ -310,9 +345,20 @@ const ApplicationForm = () => {
                         {formik.touched.answer2 && formik.errors.answer2 ? <div>{formik.errors.answer2}</div> : null}
                       </div>
 
+                      {/* Long Answer 3 */}
+                      <div className="horizontal-box">
+                        <label htmlFor="answer3">Discuss a technical (not necessarily CS-related; could be robotics, graphic design, etc.) project you’ve worked on in the past.</label>
+                        <p>(~200 words)</p>
+                        <textarea
+                          id='answer3'
+                          type='text'
+                          {...formik.getFieldProps('answer3')} />
+                        {formik.touched.answer3 && formik.errors.answer3 ? <div>{formik.errors.answer3}</div> : null}
+                      </div>
+
                       {/* EC Commitments */}
                       <div className="horizontal-box">
-                        <label htmlFor="commitments">Please tell us about your commitments.</label>
+                        <label htmlFor="commitments">Please tell us about your commitments this semester.</label>
                         <p>(Example: CS61A: xx hours)</p>
                         <textarea
                           id='commitments'
@@ -323,7 +369,7 @@ const ApplicationForm = () => {
 
                       {/* Timestamp */}
                       <div className="horizontal-box">
-                        <label htmlFor="timestamp">Your Application ID</label>
+                        <label htmlFor="timestamp" style={{"color": "#ff8a00"}}>Your Application ID</label>
                         <p>Please save this ID and refer to it should you need to contact us regarding your application.</p>
                         <input
                           id="timestamp"

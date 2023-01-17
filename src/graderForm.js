@@ -39,10 +39,13 @@ const GraderForm = () => {
   const [rating1, setRating1] = useState("1");
   const [rating2, setRating2] = useState("1");
   const [rating3, setRating3] = useState("1");
+  const [rating4, setRating4] = useState("1");
+
   const [comment0, setComment0] = useState('');
   const [comment1, setComment1] = useState('');
   const [comment2, setComment2] = useState('');
   const [comment3, setComment3] = useState('');
+  const [comment4, setComment4] = useState('');
   const [loadingMessage, setLoading] = useState('');
 
   const navToHome = () => {
@@ -90,6 +93,7 @@ const GraderForm = () => {
             resume: resumeURL,
             answer1: applicant.answer1,
             answer2: applicant.answer2,
+            answer3: applicant.answer3,
             commitments: applicant.commitments,
             year: applicant.year,
             major: applicant.major,
@@ -145,6 +149,7 @@ const GraderForm = () => {
             resume: userInfo[0].resumeURL,
             answer1: userInfo[0].answer1,
             answer2: userInfo[0].answer2,
+            answer3: userInfo[0].answer3,
             commitments: userInfo[0].commitments,
             major: userInfo[0].major,
             year: userInfo[0].year,
@@ -165,6 +170,8 @@ const GraderForm = () => {
                 rating2: rating2,
                 comment3: comment3,
                 rating3: rating3,
+                comment4: comment4,
+                rating4: rating4,
                 applicantID: userInfo[0].timestamp,
               }),
             })
@@ -180,10 +187,12 @@ const GraderForm = () => {
                 setRating1('1');
                 setRating2('1');
                 setRating3('1');
+                setRating4('1');
                 setComment0('');
                 setComment1('');
                 setComment2('');
                 setComment3('');
+                setComment4('');
               });
           }}
         >
@@ -205,8 +214,8 @@ const GraderForm = () => {
 
               <div>
                 <h4>
-                  For each applicant, please provide a rating and leave thorough
-                  comments for every essay question.
+                  For each applicant, please provide a rating and leave concise
+                  comments for every response.
                 </h4>
 
                 <form onSubmit={formik.handleSubmit}>
@@ -272,7 +281,7 @@ const GraderForm = () => {
                   {/* Essay Question 1 */}
                   <div className="horizontal-box">
                     <label htmlFor="answer1">
-                      Long Answer: Why PlexTech?
+                      Question 1: Describe how you have taken advantage of a significant opportunity or worked to overcome a barrier you have faced.
                     </label>
                     <p>{userInfo[0].answer1}</p>
 
@@ -288,7 +297,7 @@ const GraderForm = () => {
                     />
 
                     <label htmlFor="rating1">
-                      Choose a rating for this essay question:
+                      Choose a rating for this response:
                     </label>
                     <select className="dropbtn" name="rating1" value={rating1} onChange={(event) => { setRating1(event.target.value) }}>
                       <option value="" disabled={true}>Choose a rating:</option>
@@ -303,7 +312,7 @@ const GraderForm = () => {
                   {/* Essay Question 2 */}
                   <div className="horizontal-box">
                     <label htmlFor="essay2">
-                      Long Answer: A Story about Yourself
+                      Question 2: Tell us about a community that’s especially important to you: how did you contribute to this community, and what makes it so inspiring? 
                     </label>
                     <p>{userInfo[0].answer2}</p>
 
@@ -318,9 +327,39 @@ const GraderForm = () => {
                     />
 
                     <label htmlFor="rating2">
-                      Choose a rating for this essay question:
+                      Choose a rating for this response:
                     </label>
                     <select className="dropbtn" name="rating2" value={rating2} onChange={(event) => { setRating2(event.target.value) }}>
+                      <option value="" disabled={true}>Choose a rating:</option>
+                      <option value={1}>1</option>
+                      <option value={2}>2</option>
+                      <option value={3}>3</option>
+                      <option value={4}>4</option>
+                      <option value={5}>5</option>
+                    </select>
+                  </div>
+
+                  {/* Essay Question 3 */}
+                  <div className="horizontal-box">
+                    <label htmlFor="essay3">
+                      Question 3: Tell us about a technical (not necessarily CS-related; could be robotics, graphic design, etc.) project you’ve worked on in the past.
+                    </label>
+                    <p>{userInfo[0].answer3}</p>
+
+                    <label htmlFor="comment3">Comment</label>
+                    <textarea
+                      className="commentHeight"
+                      id="comment3"
+                      type="text"
+                      wrap="soft"
+                      value={comment3}
+                      onChange={(event) => { setComment3(event.target.value) }}
+                    />
+
+                    <label htmlFor="rating3">
+                      Choose a rating for this response:
+                    </label>
+                    <select className="dropbtn" name="rating3" value={rating3} onChange={(event) => { setRating3(event.target.value) }}>
                       <option value="" disabled={true}>Choose a rating:</option>
                       <option value={1}>1</option>
                       <option value={2}>2</option>
@@ -337,20 +376,20 @@ const GraderForm = () => {
                     </label>
                     <p>{userInfo[0].commitments}</p>
 
-                    <label htmlFor="comment3">Comment</label>
+                    <label htmlFor="comment4">Comment</label>
                     <textarea
                       className="commentHeight"
-                      id="comment3"
+                      id="comment4"
                       type="text"
                       wrap="soft"
-                      value={comment3}
-                      onChange={(event) => { setComment3(event.target.value) }}
+                      value={comment4}
+                      onChange={(event) => { setComment4(event.target.value) }}
                     />
 
-                    <label htmlFor="rating3">
-                      Choose a rating for this essay question:
+                    <label htmlFor="rating4">
+                      Choose a rating for the applicant's commitments:
                     </label>
-                    <select className="dropbtn" name="rating3" value={rating3} onChange={(event) => { setRating3(event.target.value) }}>
+                    <select className="dropbtn" name="rating4" value={rating4} onChange={(event) => { setRating4(event.target.value) }}>
                       <option value="" disabled={true}>Choose a rating:</option>
                       <option value={1}>1</option>
                       <option value={2}>2</option>
@@ -359,6 +398,7 @@ const GraderForm = () => {
                       <option value={5}>5</option>
                     </select>
                   </div>
+
                   {/* Submit Button */}
                   <div className='horizontal-box'>
                     <Button
