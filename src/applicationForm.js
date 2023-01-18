@@ -196,8 +196,26 @@ const ApplicationForm = () => {
                       assigned_to: [],
                       graded_by: [],
                     })
-                  }).then(() => {
-                    navigate('/success', { replace: true, state: { UID: values.timestamp } });
+                  }).then((response) => {
+                    if (response.ok) {
+                      navigate('/success', { replace: true, state: { UID: values.timestamp } });
+                    } else {
+                      fetch('https://plextech-application-backend-production.up.railway.app/report_error',
+                      {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                          'Access-Control-Allow-Origin': '*',
+                        },
+                        body: JSON.stringify({
+                          first_name: values.firstName,
+                          last_name: values.lastName,
+                          email: values.email,
+                          time_created: values.timestamp,
+                        })
+                      });
+                      setLoading('An error occurred while submitting your application; please contact us if the error persists.')
+                    }
                   });
                 }
               }}
@@ -369,7 +387,7 @@ const ApplicationForm = () => {
 
                       {/* Timestamp */}
                       <div className="horizontal-box">
-                        <label htmlFor="timestamp" style={{"color": "#ff8a00"}}>Your Application ID</label>
+                        <label htmlFor="timestamp" style={{ "color": "#ff8a00" }}>Your Application ID</label>
                         <p>Please save this ID and refer to it should you need to contact us regarding your application.</p>
                         <input
                           id="timestamp"
