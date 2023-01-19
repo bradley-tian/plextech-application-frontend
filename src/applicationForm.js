@@ -100,9 +100,11 @@ const ApplicationForm = () => {
   const [resume, setResume] = React.useState('');
   const [year, setYear] = React.useState('2023');
   const [gender, setGender] = React.useState('');
+  const [race, setRace] = React.useState('');
   const [loadingMessage, setLoading] = React.useState('');
   const [roleMessage, setRoleMessage] = React.useState('');
   const [resumeMessage, setResumeMessage] = React.useState('');
+  const [raceMessage, setRaceMessage] = React.useState('');
 
   const getBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -138,6 +140,7 @@ const ApplicationForm = () => {
                 firstName: '',
                 lastName: '',
                 email: '',
+                phone: '',
                 timestamp: Date.now(),
                 desiredRoles: [],
                 answer1: '',
@@ -146,6 +149,7 @@ const ApplicationForm = () => {
                 commitments: '',
                 major: '',
                 gender: '',
+                race: '',
               }}
               validationSchema={
                 Yup.object(
@@ -153,6 +157,7 @@ const ApplicationForm = () => {
                     firstName: Yup.string().required('Required'),
                     lastName: Yup.string().required('Required'),
                     email: Yup.string().required('Required'),
+                    phone: Yup.string().required('Required'),
                     answer1: Yup.string().required('Required').max(1000, 'Response must not exceed 1000 characters.'),
                     answer2: Yup.string().required('Required').max(1000, 'Response must not exceed 1000 characters.'),
                     answer3: Yup.string().required('Required').max(1000, 'Response must not exceed 1000 characters.'),
@@ -167,6 +172,9 @@ const ApplicationForm = () => {
                 }
                 if (resume.length === 0) {
                   setResumeMessage('required')
+                }
+                if (race === '') {
+                  setRaceMessage('required')
                 }
                 if (gender === '') {
                   setGender(values.gender);
@@ -183,6 +191,7 @@ const ApplicationForm = () => {
                       first_name: values.firstName,
                       last_name: values.lastName,
                       email: values.email,
+                      phone: values.phone,
                       time_created: values.timestamp,
                       desired_roles: values.desiredRoles,
                       resume: resume,
@@ -193,6 +202,7 @@ const ApplicationForm = () => {
                       year: year,
                       major: values.major,
                       gender: gender,
+                      race: race,
                       assigned_to: [],
                       graded_by: [],
                     })
@@ -201,19 +211,20 @@ const ApplicationForm = () => {
                       navigate('/success', { replace: true, state: { UID: values.timestamp } });
                     } else {
                       fetch('https://plextech-application-backend-production.up.railway.app/report_error',
-                      {
-                        method: 'POST',
-                        headers: {
-                          'Content-Type': 'application/json',
-                          'Access-Control-Allow-Origin': '*',
-                        },
-                        body: JSON.stringify({
-                          first_name: values.firstName,
-                          last_name: values.lastName,
-                          email: values.email,
-                          time_created: values.timestamp,
-                        })
-                      });
+                        {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json',
+                            'Access-Control-Allow-Origin': '*',
+                          },
+                          body: JSON.stringify({
+                            first_name: values.firstName,
+                            last_name: values.lastName,
+                            email: values.email,
+                            phone: values.phone,
+                            time_created: values.timestamp,
+                          })
+                        });
                       setLoading('An error occurred while submitting your application; please contact us if the error persists.')
                     }
                   });
@@ -283,6 +294,16 @@ const ApplicationForm = () => {
                         {formik.touched.email && formik.errors.email ? <div>{formik.errors.email}</div> : null}
                       </div>
 
+                      {/* Phone */}
+                      <div className="horizontal-box">
+                        <label htmlFor="phone">Phone Number</label>
+                        <input
+                          id="phone"
+                          type="text"
+                          {...formik.getFieldProps('phone')} />
+                        {formik.touched.phone && formik.errors.phone ? <div>{formik.errors.phone}</div> : null}
+                      </div>
+
                       {/* Year */}
                       <div className="horizontal-box">
                         <label htmlFor="graduationYear">Graduation Year</label>
@@ -320,6 +341,24 @@ const ApplicationForm = () => {
                           id="gender"
                           type="text"
                           {...formik.getFieldProps('gender')} />
+                      </div>
+
+                      { /* Demographics */}
+                      <div>
+                        <label htmlFor="race">
+                          Your Demographic Background
+                        </label>
+                        <select className="dropbtn" name="race" value={race} onChange={(event) => { setRace(event.target.value) }}>
+                          <option value="" disabled={true}>Select from below:</option>
+                          <option value={"American Indian or Alaska Native"}>American Indian or Alaska Native</option>
+                          <option value={"Asian (including Indian subcontinent and Philippines origin)"}>Asian (including Indian subcontinent and Philippines origin)</option>
+                          <option value={"Black or African American"}>Black or African American</option>
+                          <option value={"White"}>White</option>
+                          <option value={"Middle Eastern"}>Middle Eastern</option>
+                          <option value={"Native American or Other Pacific Islander"}>Native American or Other Pacific Islander</option>
+                          <option value={"Prefer not to answer"}>Prefer not to answer</option>
+                        </select>
+                        <p>{raceMessage}</p>
                       </div>
 
                       {/* Desired Roles */}
