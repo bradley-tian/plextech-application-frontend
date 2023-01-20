@@ -43,7 +43,7 @@ function SuccessPage() {
             <ThemeProvider theme={theme}>
                 <div className='form-field'>
                     <div>
-                        <h2>Thank you for your applying to PlexTech!</h2>
+                        <h2>Thank you for applying to PlexTech!</h2>
                         <h4>We will reach out to you very soon.</h4>
                         <br />
                         <h3 style={{ 'color': "black" }}>Your Applicant ID:</h3>
