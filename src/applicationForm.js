@@ -1,6 +1,5 @@
 import React from "react";
 import { Formik } from "formik";
-import * as Yup from 'yup';
 import "./styles.css";
 import Button from '@mui/material/Button';
 import { useNavigate } from "react-router-dom";
@@ -101,10 +100,22 @@ const ApplicationForm = () => {
   const [year, setYear] = React.useState('2023');
   const [gender, setGender] = React.useState('');
   const [race, setRace] = React.useState('');
+
   const [loadingMessage, setLoading] = React.useState('');
+
+  const [firstNameMessage, setFirst] = React.useState('');
+  const [lastNameMessage, setLast] = React.useState('');
+  const [emailMessage, setEmail] = React.useState('');
+  const [phoneMessage, setPhone] = React.useState('');
+  const [majorMessage, setMajor] = React.useState('');
   const [roleMessage, setRoleMessage] = React.useState('');
   const [resumeMessage, setResumeMessage] = React.useState('');
   const [raceMessage, setRaceMessage] = React.useState('');
+  const [answer1Message, set1] = React.useState('');
+  const [answer2Message, set2] = React.useState('');
+  const [answer3Message, set3] = React.useState('');
+  const [commitmentMessage, setCommitment] = React.useState('');
+
 
   const getBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -151,35 +162,89 @@ const ApplicationForm = () => {
                 gender: '',
                 race: '',
               }}
-              validationSchema={
-                Yup.object(
-                  {
-                    firstName: Yup.string().required('Required'),
-                    lastName: Yup.string().required('Required'),
-                    email: Yup.string().required('Required'),
-                    phone: Yup.string().required('Required'),
-                    answer1: Yup.string().required('Required').max(1000, 'Response must not exceed 1000 characters.'),
-                    answer2: Yup.string().required('Required').max(1000, 'Response must not exceed 1000 characters.'),
-                    answer3: Yup.string().required('Required').max(1000, 'Response must not exceed 1000 characters.'),
-                    commitments: Yup.string().required('Required'),
-                    major: Yup.string().required('Required'),
-                  }
-                )
-              }
+
               onSubmit={async (values) => {
+                let flagged = false;
+                if (values.firstName === '') {
+                  setFirst('required');
+                  setLoading('Please fill out the required fields above.');
+                  flagged = true;
+                }
+                if (values.lastName === '') {
+                  setLast('required');
+                  setLoading('Please fill out the required fields above.');
+                  flagged = true;
+                }
+                if (values.email === '') {
+                  setEmail('required');
+                  setLoading('Please fill out the required fields above.');
+                  flagged = true;
+                }
+                if (values.phone === '') {
+                  setPhone('required');
+                  setLoading('Please fill out the required fields above.');
+                  flagged = true;
+                }
+                if (values.major === '') {
+                  setMajor('required');
+                  setLoading('Please fill out the required fields above.');
+                  flagged = true;
+                }
+                if (values.answer1 === '') {
+                  set1('required');
+                  setLoading('Please fill out the required fields above.');
+                  flagged = true;
+                } else if (values.answer1.length > 1000) {
+                  set1('Your answer must not exceed 1000 characters.')
+                  flagged = true;
+                  if (loadingMessage !== 'Please fill out the required fields above.') {
+                    setLoading('Please modify the fields above to meet requirements.');
+                  }
+                }
+                if (values.answer2 === '') {
+                  set2('required');
+                  flagged = true;
+                } else if (values.answer2.length > 1000) {
+                  set2('Your answer must not exceed 1000 characters.');
+                  flagged = true;
+                  if (loadingMessage !== 'Please fill out the required fields above.') {
+                    setLoading('Please modify the fields above to meet requirements.');
+                  }
+                }
+                if (values.answer3 === '') {
+                  set3('required');
+                  flagged = true;
+                } else if (values.answer3.length > 1000) {
+                  set3('Your answer must not exceed 1000 characters.');
+                  flagged = true;
+                  if (loadingMessage !== 'Please fill out the required fields above.') {
+                    setLoading('Please modify the fields above to meet requirements.');
+                  }
+                }
+                if (values.commitments === '') {
+                  setCommitment('required');
+                  setLoading('Please fill out the required fields above.');
+                  flagged = true;
+                }
                 if (role.length === 0) {
-                  setRoleMessage('required')
+                  setRoleMessage('required');
+                  setLoading('Please fill out the required fields above.');
+                  flagged = true;
                 }
                 if (resume.length === 0) {
-                  setResumeMessage('required')
+                  setResumeMessage('required');
+                  setLoading('Please fill out the required fields above.');
+                  flagged = true;
                 }
                 if (race === '') {
-                  setRaceMessage('required')
+                  setRaceMessage('required');
+                  setLoading('Please fill out the required fields above.');
+                  flagged = true;
                 }
                 if (gender === '') {
                   setGender(values.gender);
                 }
-                else {
+                if (flagged === false) {
                   setLoading('Submitting your application; please wait...')
                   await fetch('https://plextech-application-backend-production.up.railway.app/add_applicant', {
                     method: 'POST',
@@ -225,7 +290,7 @@ const ApplicationForm = () => {
                             time_created: values.timestamp,
                           })
                         });
-                      setLoading('An error occurred while submitting your application; please contact us if the error persists.')
+                      setLoading('An error occurred while submitting your application; please contact us at plextech@berkeley.edu if the error persists.')
                     }
                   });
                 }
@@ -271,7 +336,7 @@ const ApplicationForm = () => {
                           id="firstName"
                           type="text"
                           {...formik.getFieldProps('firstName')} />
-                        {formik.touched.firstName && formik.errors.firstName ? <div>{formik.errors.firstName}</div> : null}
+                        <p className='warning'>{firstNameMessage}</p>
                       </div>
 
                       {/* Last Name */}
@@ -281,7 +346,7 @@ const ApplicationForm = () => {
                           id="lastName"
                           type="text"
                           {...formik.getFieldProps('lastName')} />
-                        {formik.touched.lastName && formik.errors.lastName ? <div>{formik.errors.lastName}</div> : null}
+                        <p className='warning'>{lastNameMessage}</p>
                       </div>
 
                       {/* Email */}
@@ -291,7 +356,7 @@ const ApplicationForm = () => {
                           id="email"
                           type="text"
                           {...formik.getFieldProps('email')} />
-                        {formik.touched.email && formik.errors.email ? <div>{formik.errors.email}</div> : null}
+                        <p className='warning'>{emailMessage}</p>
                       </div>
 
                       {/* Phone */}
@@ -301,7 +366,7 @@ const ApplicationForm = () => {
                           id="phone"
                           type="text"
                           {...formik.getFieldProps('phone')} />
-                        {formik.touched.phone && formik.errors.phone ? <div>{formik.errors.phone}</div> : null}
+                        <p className='warning'>{phoneMessage}</p>
                       </div>
 
                       {/* Year */}
@@ -323,7 +388,7 @@ const ApplicationForm = () => {
                           id="major"
                           type="text"
                           {...formik.getFieldProps('major')} />
-                        {formik.touched.major && formik.errors.major ? <div>{formik.errors.major}</div> : null}
+                        <p className='warning'>required</p>
                       </div>
 
                       <div className="horizontal-box">
@@ -358,25 +423,25 @@ const ApplicationForm = () => {
                           <option value={"Native American or Other Pacific Islander"}>Native American or Other Pacific Islander</option>
                           <option value={"Prefer not to answer"}>Prefer not to answer</option>
                         </select>
-                        <p>{raceMessage}</p>
+                        <p className='warning'>{raceMessage}</p>
                       </div>
 
                       {/* Desired Roles */}
                       <div className="horizontal-box">
                         <RoleSelector id='desiredRoles' roles={role} setRoles={setRole} />
-                        <p>{roleMessage}</p>
+                        <p className='warning'>{roleMessage}</p>
                       </div>
 
                       {/* Resume Upload */}
                       <div className="horizontal-box">
                         <label htmlFor="resume">Resume / CV</label>
-                        <p>Please limit your resume to one page.</p>
+                        <p>Please limit your resume to a one-page PDF document.</p>
                         <input
                           type='file'
                           accept='application/pdf'
                           onChange={saveResume}
                         />
-                        <p>{resumeMessage}</p>
+                        <p className="warning">{resumeMessage}</p>
                       </div>
 
                       {/* Long Answer 1 */}
@@ -387,7 +452,7 @@ const ApplicationForm = () => {
                           id='answer1'
                           type='text'
                           {...formik.getFieldProps('answer1')} />
-                        {formik.touched.answer1 && formik.errors.answer1 ? <div>{formik.errors.answer1}</div> : null}
+                        <p className='warning'>{answer1Message}</p>
 
                       </div>
 
@@ -399,7 +464,7 @@ const ApplicationForm = () => {
                           id='answer2'
                           type='text'
                           {...formik.getFieldProps('answer2')} />
-                        {formik.touched.answer2 && formik.errors.answer2 ? <div>{formik.errors.answer2}</div> : null}
+                        <p className='warning'>{answer2Message}</p>
                       </div>
 
                       {/* Long Answer 3 */}
@@ -410,7 +475,7 @@ const ApplicationForm = () => {
                           id='answer3'
                           type='text'
                           {...formik.getFieldProps('answer3')} />
-                        {formik.touched.answer3 && formik.errors.answer3 ? <div>{formik.errors.answer3}</div> : null}
+                        <p className='warning'>{answer3Message}</p>
                       </div>
 
                       {/* EC Commitments */}
@@ -421,7 +486,7 @@ const ApplicationForm = () => {
                           id='commitments'
                           type='text'
                           {...formik.getFieldProps('commitments')} />
-                        {formik.touched.commitments && formik.errors.commitments ? <div>{formik.errors.commitments}</div> : null}
+                        <p className='warning'>{commitmentMessage}</p>
                       </div>
 
                       {/* Timestamp */}
@@ -444,8 +509,8 @@ const ApplicationForm = () => {
                           fontWeight="Bold"
                           style={{ "marginBottom": "50px" }}
                         >Submit</Button>
+                        <p className='warning'>{loadingMessage}</p>
                       </div>
-                      <p>{loadingMessage}</p>
                       <p className="copyright">Copyright © 2023 PlexTech All Rights Reserved.</p>
                     </form>
                   </div>
