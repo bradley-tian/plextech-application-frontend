@@ -152,6 +152,8 @@ const ApplicationForm = () => {
                 lastName: '',
                 email: '',
                 phone: '',
+                linkedin: '',
+                website: '',
                 timestamp: Date.now(),
                 desiredRoles: [],
                 answer1: '',
@@ -260,6 +262,8 @@ const ApplicationForm = () => {
                       time_created: values.timestamp,
                       desired_roles: values.desiredRoles,
                       resume: resume,
+                      linkedin: values.linkedin,
+                      website: values.website,
                       answer1: values.answer1,
                       answer2: values.answer2,
                       answer3: values.answer3,
@@ -388,7 +392,7 @@ const ApplicationForm = () => {
                           id="major"
                           type="text"
                           {...formik.getFieldProps('major')} />
-                        <p className='warning'>required</p>
+                        <p className='warning'>{majorMessage}</p>
                       </div>
 
                       <div className="horizontal-box">
@@ -442,6 +446,24 @@ const ApplicationForm = () => {
                           onChange={saveResume}
                         />
                         <p className="warning">{resumeMessage}</p>
+                      </div>
+
+                      {/* LinkedIn */}
+                      <div className="horizontal-box">
+                        <label htmlFor="linkedin">LinkedIn Profile (optional)</label>
+                        <input
+                          id="linkedin"
+                          type="text"
+                          {...formik.getFieldProps('linkedin')} />
+                      </div>
+
+                      {/* LinkedIn */}
+                      <div className="horizontal-box">
+                        <label htmlFor="website">Personal Website (optional)</label>
+                        <input
+                          id="website"
+                          type="text"
+                          {...formik.getFieldProps('website')} />
                       </div>
 
                       {/* Long Answer 1 */}
