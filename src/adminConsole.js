@@ -12,9 +12,11 @@ function AdminConsole() {
     const navigate = useNavigate();
     const [graderMessage, setGraderMessage] = useState("");
     const [CSVMessage, setCSVMessage] = useState("");
+    const [CSVMessage2, setCSVMessage2] = useState("");
     const [graders, setGraders] = useState([]);
     const [action1, setAction1] = useState('add');
-    const [results, setResults] = useState([])
+    const [results, setResults] = useState([]);
+    const [applications, setApplications] = useState([]);
 
     const theme = createTheme({
         status: {
@@ -55,7 +57,10 @@ function AdminConsole() {
         async function checkUser(value) {
             await fetch('https://plextech-application-backend-production.up.railway.app/check_admin', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                },
                 body: JSON.stringify({
                     email: value.email,
                 })
@@ -79,6 +84,7 @@ function AdminConsole() {
         fetchGraderData();
         loadAnalytics();
         getResults();
+        getApplications();
         loadResultAnalytics();
     }, []);
 
@@ -196,7 +202,7 @@ function AdminConsole() {
                 if (data.length === 0) {
                     setCSVMessage("There are currently no reviews.");
                 } else {
-                    setResults(data)
+                    setResults(data);
                 }
             })
             .catch((err) => {
@@ -231,6 +237,56 @@ function AdminConsole() {
                     download
                 >Export Results as CSV File</Button>
                 <p>{CSVMessage}</p>
+            </>
+        )
+    }
+
+    async function getApplications() {
+        await fetch('https://plextech-application-backend-production.up.railway.app/export_applications', {
+            method: 'GET',
+        })
+            .then((response) => {
+                return (response.json());
+            })
+            .then((data) => {
+                if (data.length === 0) {
+                    setCSVMessage2("There are currently no applications.");
+                } else {
+                    setApplications(data)
+                }
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
+    }
+
+    function exportApplications() {
+        const options = {
+            fieldSeparator: ',',
+            quoteStrings: '"',
+            decimalSeparator: '.',
+            showLabels: true,
+            showTitle: true,
+            title: 'Applications',
+            useTextFile: false,
+            useBom: true,
+        };
+        const csvExport = new ExportToCsv(options);
+        csvExport.generateCsv(applications);
+    }
+
+    function Applications() {
+        return (
+            <>
+                <Button
+                    style={{ display: "flex" }}
+                    variant="contained"
+                    color="neutral"
+                    onClick={exportApplications}
+                    className="exportApplications"
+                    download
+                >Export Applications as CSV File</Button>
+                <p>{CSVMessage2}</p>
             </>
         )
     }
@@ -306,14 +362,14 @@ function AdminConsole() {
     async function flushDatabase() {
         if (adminKey === 'plextechpermission') {
             await fetch("https://plextech-application-backend-production.up.railway.app/flush_database", {
-            method: 'GET',
-        })
-            .then(() => {
-                setFlushMessage('Database successfully cleared.');
+                method: 'GET',
             })
-            .catch((err) => {
-                console.log(err.message);
-            });
+                .then(() => {
+                    setFlushMessage('Database successfully cleared.');
+                })
+                .catch((err) => {
+                    console.log(err.message);
+                });
         } else {
             setFlushMessage('Incorrect admin key.')
         }
@@ -428,6 +484,11 @@ function AdminConsole() {
                     </div>
 
                     <div className='horizontal-box'>
+                        <h2>Applications</h2>
+                        <Applications />
+                    </div>
+
+                    <div className='horizontal-box'>
                         <h2>Result Analytics</h2>
                         <ResultsAnalytics />
                     </div>
@@ -436,10 +497,10 @@ function AdminConsole() {
                         <h2>DANGER: Database Operations</h2>
                         <label>Enter admin key to proceed:</label>
                         <input
-                        type='text'
-                        value={adminKey}
-                        onChange={(e) => setAdminKey(e.target.value)}
-                        style={{ marginBottom: "2rem" }}
+                            type='text'
+                            value={adminKey}
+                            onChange={(e) => setAdminKey(e.target.value)}
+                            style={{ marginBottom: "2rem" }}
                         ></input>
                         <Button
                             style={{ display: "flex" }}

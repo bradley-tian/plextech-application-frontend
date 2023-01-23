@@ -34,6 +34,9 @@ const GraderForm = () => {
     year: "",
     major: "",
     gender: "",
+    linkedin: "",
+    website: "",
+    race: "",
   }]);
   const [rating0, setRating0] = useState("1");
   const [rating1, setRating1] = useState("1");
@@ -98,6 +101,9 @@ const GraderForm = () => {
             year: applicant.year,
             major: applicant.major,
             gender: applicant.gender,
+            race: applicant.race,
+            linkedin: applicant.linkedin,
+            website: applicant.website,
           })
         }
         setData(applicantData);
@@ -248,6 +254,21 @@ const GraderForm = () => {
                   <label htmlFor="gender">Gender</label>
                   <div className="horizontal-box">
                     <p>{userInfo[0].gender}</p>
+                  </div>
+
+                  <label htmlFor="race">Demographics</label>
+                  <div className="horizontal-box">
+                    <p>{typeof userInfo[0].race != typeof undefined ? userInfo[0].race : 'N/A'}</p>
+                  </div>
+
+                  <label htmlFor="website">Personal Website</label>
+                  <div className="horizontal-box">
+                    <p>{typeof userInfo[0].website != typeof undefined ? userInfo[0].website : 'None'}</p>
+                  </div>
+
+                  <label htmlFor="linkedin">LinkedIn</label>
+                  <div className="horizontal-box">
+                    <p>{typeof userInfo[0].linkedin != typeof undefined ? userInfo[0].linkedin : 'None'}</p>
                   </div>
 
                   <label htmlFor="resume">Resume/CV</label>

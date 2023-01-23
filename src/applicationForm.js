@@ -260,7 +260,7 @@ const ApplicationForm = () => {
                       email: values.email,
                       phone: values.phone,
                       time_created: values.timestamp,
-                      desired_roles: values.desiredRoles,
+                      desired_roles: role,
                       resume: resume,
                       linkedin: values.linkedin,
                       website: values.website,
