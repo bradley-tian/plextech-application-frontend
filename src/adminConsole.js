@@ -124,13 +124,28 @@ function AdminConsole() {
             <>
                 <ul>
                     <li>Total Application Count: {analyticData.count}</li>
+                    <br/>
+                    <li>Grade</li>
+                    <br/>
                     <li>Freshmen: {analyticData.freshmen} ({((analyticData.freshmen / analyticData.count) * 100).toFixed(2)}%)</li>
                     <li>Sophomore: {analyticData.sophomore} ({((analyticData.sophomore / analyticData.count) * 100).toFixed(2)}%)</li>
                     <li>Junior: {analyticData.junior} ({((analyticData.junior / analyticData.count) * 100).toFixed(2)}%)</li>
                     <li>Senior: {analyticData.senior} ({((analyticData.senior / analyticData.count) * 100).toFixed(2)}%)</li>
+                    <br/>
+                    <li>Gender</li>
+                    <br/>
                     <li>Male: {analyticData.male} ({((analyticData.male / analyticData.count) * 100).toFixed(2)}%)</li>
                     <li>Female: {analyticData.female} ({((analyticData.female / analyticData.count) * 100).toFixed(2)}%)</li>
                     <li>Other Genders: {analyticData.other} ({((analyticData.other / analyticData.count) * 100).toFixed(2)}%)</li>
+                    <br/>
+                    <li>Ethnicity</li>
+                    <br/>
+                    <li>American Indian: {analyticData.American_Indian} ({((analyticData.American_Indian / analyticData.count) * 100).toFixed(2)}%)</li>
+                    <li>Asian: {analyticData.Asian} ({((analyticData.Asian / analyticData.count) * 100).toFixed(2)}%)</li>
+                    <li>Black: {analyticData.Black} ({((analyticData.Black / analyticData.count) * 100).toFixed(2)}%)</li>
+                    <li>White: {analyticData.White} ({((analyticData.White / analyticData.count) * 100).toFixed(2)}%)</li>
+                    <li>Middle Eastern: {analyticData.Middle_Eastern} ({((analyticData.Middle_Eastern / analyticData.count) * 100).toFixed(2)}%)</li>
+                    <li>Pacific Islander: {analyticData.Pacific_Islander} ({((analyticData.Pacific_Islander / analyticData.count) * 100).toFixed(2)}%)</li>
                 </ul>
                 <Button
                     style={{ display: "flex" }}
