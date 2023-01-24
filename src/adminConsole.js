@@ -310,8 +310,11 @@ function AdminConsole() {
     }
 
     async function getEvaluations() {
-        await fetch('http://127.0.0.1:5000/evaluate_results', {
+        await fetch('https://plextech-application-backend-production.up.railway.app/evaluate_results', {
             method: 'GET',
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+              },
         })
             .then((response) => {
                 return (response.json());
@@ -364,8 +367,6 @@ function AdminConsole() {
     function loadResultAnalytics() {
         const reviews = results.slice(1);
 
-        console.log(reviews)
-
         const judgments = {};
         for (let grader of graders) {
             judgments[grader[1]] = {
@@ -373,6 +374,7 @@ function AdminConsole() {
                 'rating1': [0],
                 'rating2': [0],
                 'rating3': [0],
+                'rating4': [0],
             };
         }
 
@@ -381,6 +383,7 @@ function AdminConsole() {
             judgments[review['grader']]['rating1'].push(parseInt(review['rating1']));
             judgments[review['grader']]['rating2'].push(parseInt(review['rating2']));
             judgments[review['grader']]['rating3'].push(parseInt(review['rating3']));
+            judgments[review['grader']]['rating4'].push(parseInt(review['rating4']));
         }
 
         for (let g of Object.keys(judgments)) {
@@ -389,6 +392,7 @@ function AdminConsole() {
             judgments[g]['rating1'] = (judgments[g]['rating1'].reduce((a, b) => a + b) / count).toFixed(2);
             judgments[g]['rating2'] = (judgments[g]['rating2'].reduce((a, b) => a + b) / count).toFixed(2);
             judgments[g]['rating3'] = (judgments[g]['rating3'].reduce((a, b) => a + b) / count).toFixed(2);
+            judgments[g]['rating4'] = (judgments[g]['rating4'].reduce((a, b) => a + b) / count).toFixed(2);
         }
 
         setResultAnalytics(judgments);
@@ -396,7 +400,7 @@ function AdminConsole() {
 
     function ResultsAnalytics() {
 
-        const keys = ['rating0', 'rating1', 'rating2', 'rating3'];
+        const keys = ['rating0', 'rating1', 'rating2', 'rating3', 'rating4'];
 
         return (
             <>
