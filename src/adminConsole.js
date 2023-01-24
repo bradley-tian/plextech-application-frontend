@@ -13,10 +13,12 @@ function AdminConsole() {
     const [graderMessage, setGraderMessage] = useState("");
     const [CSVMessage, setCSVMessage] = useState("");
     const [CSVMessage2, setCSVMessage2] = useState("");
+    const [CSVMessage3, setCSVMessage3] = useState("");
     const [graders, setGraders] = useState([]);
     const [action1, setAction1] = useState('add');
     const [results, setResults] = useState([]);
     const [applications, setApplications] = useState([]);
+    const [evaluations, setEvaluations] = useState([]);
 
     const theme = createTheme({
         status: {
@@ -85,6 +87,7 @@ function AdminConsole() {
         loadAnalytics();
         getResults();
         getApplications();
+        getEvaluations();
         loadResultAnalytics();
     }, []);
 
@@ -306,10 +309,62 @@ function AdminConsole() {
         )
     }
 
+    async function getEvaluations() {
+        await fetch('http://127.0.0.1:5000/evaluate_results', {
+            method: 'GET',
+        })
+            .then((response) => {
+                return (response.json());
+            })
+            .then((data) => {
+                if (data.length === 0) {
+                    setCSVMessage3("There are currently no reviews.");
+                } else {
+                    setEvaluations(data)
+                }
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
+    }
+
+    function exportEvaluations() {
+        const options = {
+            fieldSeparator: ',',
+            quoteStrings: '"',
+            decimalSeparator: '.',
+            showLabels: true,
+            showTitle: true,
+            title: 'Evaluations',
+            useTextFile: false,
+            useBom: true,
+        };
+        const csvExport = new ExportToCsv(options);
+        csvExport.generateCsv(evaluations);
+    }
+
+    function Evaluations() {
+        return (
+            <>
+                <Button
+                    style={{ display: "flex" }}
+                    variant="contained"
+                    color="neutral"
+                    onClick={exportEvaluations}
+                    className="exportEvaluations"
+                    download
+                >Export Evaluations as CSV File</Button>
+                <p>{CSVMessage3}</p>
+            </>
+        )
+    }
+
     const [resultAnalytics, setResultAnalytics] = useState({});
 
     function loadResultAnalytics() {
         const reviews = results.slice(1);
+
+        console.log(reviews)
 
         const judgments = {};
         for (let grader of graders) {
@@ -501,6 +556,11 @@ function AdminConsole() {
                     <div className='horizontal-box'>
                         <h2>Applications</h2>
                         <Applications />
+                    </div>
+
+                    <div className='horizontal-box'>
+                        <h2>Normalized Evaluations</h2>
+                        <Evaluations />
                     </div>
 
                     <div className='horizontal-box'>
