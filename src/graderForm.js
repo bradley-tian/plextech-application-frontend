@@ -24,7 +24,7 @@ const theme = createTheme({
 const GraderForm = () => {
   const navigate = useNavigate();
   const [userInfo, setData] = useState([{
-    timestamp: "(ERROR) No applicant is assigned to this grader.",
+    timestamp: "Loading applicants, please stand by...",
     firstName: "",
     lastName: "",
     resume: "",
@@ -142,6 +142,7 @@ const GraderForm = () => {
     }
 
     fetchData();
+    setLoading('');
   }, []);
 
   return (
