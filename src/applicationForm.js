@@ -196,8 +196,8 @@ const ApplicationForm = () => {
                   set1('required');
                   setLoading('Please fill out the required fields above.');
                   flagged = true;
-                } else if (values.answer1.length > 1000) {
-                  set1('Your answer must not exceed 1000 characters.')
+                } else if (values.answer1.length > 1500) {
+                  set1('Your answer must not exceed 1500 characters.')
                   flagged = true;
                   if (loadingMessage !== 'Please fill out the required fields above.') {
                     setLoading('Please modify the fields above to meet requirements.');
@@ -206,8 +206,8 @@ const ApplicationForm = () => {
                 if (values.answer2 === '') {
                   set2('required');
                   flagged = true;
-                } else if (values.answer2.length > 1000) {
-                  set2('Your answer must not exceed 1000 characters.');
+                } else if (values.answer2.length > 1500) {
+                  set2('Your answer must not exceed 1500 characters.');
                   flagged = true;
                   if (loadingMessage !== 'Please fill out the required fields above.') {
                     setLoading('Please modify the fields above to meet requirements.');
@@ -216,8 +216,8 @@ const ApplicationForm = () => {
                 if (values.answer3 === '') {
                   set3('required');
                   flagged = true;
-                } else if (values.answer3.length > 1000) {
-                  set3('Your answer must not exceed 1000 characters.');
+                } else if (values.answer3.length > 1500) {
+                  set3('Your answer must not exceed 1500 characters.');
                   flagged = true;
                   if (loadingMessage !== 'Please fill out the required fields above.') {
                     setLoading('Please modify the fields above to meet requirements.');
