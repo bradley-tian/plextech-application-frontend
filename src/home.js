@@ -46,6 +46,7 @@ function Home() {
                     <img src={PlexTechLogo} alt="plextech logo" style={{ display: 'block', width: '35px', left: '85%', top: '12%', }} />
                     <h2 style={{ display: 'block' }}>Welcome to the PlexTech Application Platform!</h2>
                     <h4>If you are an applicant, please proceed to the application form.</h4>
+                    <h4 style={{color: 'red'}}>Applications due today, 12:00PM (Noon)!</h4>
                     <div className="home">
 
                         <Button style={{

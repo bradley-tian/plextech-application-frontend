@@ -34,16 +34,22 @@ const GraderForm = () => {
     year: "",
     major: "",
     gender: "",
-    linkedin: "",
-    website: "",
+    linkedin: "N/A",
+    website: "N/A",
     race: "",
   }]);
-  const [resumeRating, setresumeRating] = useState("1");
-  const [answer1Rating, setanswer1Rating] = useState("1");
-  const [answer2Rating, setanswer2Rating] = useState("1");
-  const [answer3Rating, setanswer3Rating] = useState("1");
-  const [commitmentRating, setcommitmentRating] = useState("1");
 
+  const [resCommit, setResCommit] = useState("1");
+  const [resLead, setResLead] = useState("1");
+  const [resTech, setResTech] = useState("1");
+
+  const [initiative, setInitiative] = useState("1");
+  const [problem, setProblem] = useState("1");
+  const [ansCommit, setAnsCommit] = useState("1");
+  const [impact, setImpact] = useState("1");
+  const [passion, setPassion] = useState("1");
+  const [excellence, setExcellence] = useState("1");
+  const [commitment, setcommitment] = useState("1");
 
   const [comment0, setComment0] = useState('');
   const [comment1, setComment1] = useState('');
@@ -169,17 +175,23 @@ const GraderForm = () => {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
+
                 grader: state.email,
                 comment0: comment0,
-                resumeRating: resumeRating,
+                resCommit: resCommit,
+                resLead: resLead,
+                resTech: resTech,
                 comment1: comment1,
-                answer1Rating: answer1Rating,
+                initiative: initiative,
+                problem: problem,
                 comemnt2: comment2,
-                answer2Rating: answer2Rating,
+                ansCommit: ansCommit,
+                impact: impact,
                 comment3: comment3,
-                answer3Rating: answer3Rating,
+                passion: passion,
+                excellence: excellence,
                 comment4: comment4,
-                commitmentRating: commitmentRating,
+                commitment: commitment,
                 applicantID: userInfo[0].timestamp,
               }),
             })
@@ -191,11 +203,17 @@ const GraderForm = () => {
                 }
                 setData(newData);
                 window.scrollTo(0, 0);
-                setresumeRating('1');
-                setanswer1Rating('1');
-                setanswer2Rating('1');
-                setanswer3Rating('1');
-                setcommitmentRating('1');
+
+                setResCommit('1');
+                setResLead('1');
+                setResTech('1');
+                setInitiative('1');
+                setProblem('1');
+                setAnsCommit('1');
+                setImpact('1');
+                setPassion('1');
+                setExcellence('1');
+                setcommitment('1');
                 setComment0('');
                 setComment1('');
                 setComment2('');
@@ -222,13 +240,13 @@ const GraderForm = () => {
 
               <div>
                 <h4>
-                  For each applicant, please provide a rating and leave concise
+                  For each applicant, please provide the corresponding ratings and leave concise
                   comments for every response.
                 </h4>
 
                 <form onSubmit={formik.handleSubmit}>
 
-                  <label htmlFor="timestamp">Timestamp</label>
+                  <label htmlFor="timestamp">Applicant ID</label>
                   <div className="horizontal-box">
                     <p>{typeof userInfo[0].timestamp != typeof undefined ? userInfo[0].timestamp : 'N/A'}</p>
                   </div>
@@ -273,7 +291,7 @@ const GraderForm = () => {
                     <p>{typeof userInfo[0].linkedin != typeof undefined ? userInfo[0].linkedin : 'None'}</p>
                   </div>
 
-                  <label htmlFor="resume">Resume/CV</label>
+                  <h4 style={{color: '#ec6f34'}}>Resume/CV</h4>
 
                   {/* Resume */}
                   <div className="horizontal-box">
@@ -288,23 +306,51 @@ const GraderForm = () => {
                       onChange={(event) => { setComment0(event.target.value) }}
                     />
 
-                    <label htmlFor="resumeRating">
-                      Overall resume quality:
+                    <label htmlFor="resCom">
+                      Do experiences in the applicant's resume exhibit consistency and commitment?
                     </label>
-                    <select className="dropbtn" name="resumeRating" value={resumeRating} onChange={(event) => { setresumeRating(event.target.value) }}>
+                    <select className="dropbtn" name="resCommit" value={resCommit} onChange={(event) => { setResCommit(event.target.value) }}>
                       <option value="" disabled={true}>Choose a rating:</option>
-                      <option value={1}>1</option>
+                      <option value={1}>1 (Not at all)</option>
                       <option value={2}>2</option>
                       <option value={3}>3</option>
                       <option value={4}>4</option>
-                      <option value={5}>5</option>
+                      <option value={5}>5 (A perfect amount)</option>
+                    </select>
+
+                    <label htmlFor="res">
+                      What quality of leadership experiences does the applicant's resume display?
+                    </label>
+                    <select className="dropbtn" name="resLead" value={resLead} onChange={(event) => { setResLead(event.target.value) }}>
+                      <option value="" disabled={true}>Choose a rating:</option>
+                      <option value={1}>1 (No leadership experience)</option>
+                      <option value={2}>2</option>
+                      <option value={3}>3</option>
+                      <option value={4}>4</option>
+                      <option value={5}>5 (Major leadership experiences)</option>
+                    </select>
+
+                    <label htmlFor="res">
+                      What kind of technical experience (don't need to be CS-related: bio, engineering, math, etc.) does the applicant's resume display?
+                    </label>
+                    <select className="dropbtn" name="resTech" value={resTech} onChange={(event) => { setResTech(event.target.value) }}>
+                      <option value="" disabled={true}>Choose a rating:</option>
+                      <option value={1}>1 (No technical experience)</option>
+                      <option value={2}>2</option>
+                      <option value={3}>3</option>
+                      <option value={4}>4</option>
+                      <option value={5}>5 (Significant technical experiences)</option>
                     </select>
                   </div>
 
+                  <br/>
+                  <br/>
+
                   {/* Essay Question 1 */}
                   <div className="horizontal-box">
+                    <h4 style={{color: '#ec6f34'}}>Question 1</h4>
                     <label htmlFor="answer1">
-                      Question 1: Describe how you have taken advantage of a significant opportunity or worked to overcome a barrier you have faced.
+                      Describe how you have taken advantage of a significant opportunity or worked to overcome a barrier you have faced.
                     </label>
                     <p>{userInfo[0].answer1}</p>
 
@@ -319,23 +365,39 @@ const GraderForm = () => {
                       onChange={(event) => { setComment1(event.target.value) }}
                     />
 
-                    <label htmlFor="answer1Rating">
-                      Choose a rating for this response:
+                    <label htmlFor="res">
+                      How well does the applicant demonstrate their ability to take on initiatives?
                     </label>
-                    <select className="dropbtn" name="answer1Rating" value={answer1Rating} onChange={(event) => { setanswer1Rating(event.target.value) }}>
+                    <select className="dropbtn" name="initiative" value={initiative} onChange={(event) => { setInitiative(event.target.value) }}>
                       <option value="" disabled={true}>Choose a rating:</option>
-                      <option value={1}>1</option>
+                      <option value={1}>1 (No trace at all)</option>
                       <option value={2}>2</option>
                       <option value={3}>3</option>
                       <option value={4}>4</option>
-                      <option value={5}>5</option>
+                      <option value={5}>5 (Clear signs of unique initiatives taken)</option>
+                    </select>
+
+                    <label htmlFor="res">
+                      How well does the applicant demonstrate their problem-solving abilities?
+                    </label>
+                    <select className="dropbtn" name="problem" value={problem} onChange={(event) => { setProblem(event.target.value) }}>
+                      <option value="" disabled={true}>Choose a rating:</option>
+                      <option value={1}>1 (No trace at all)</option>
+                      <option value={2}>2</option>
+                      <option value={3}>3</option>
+                      <option value={4}>4</option>
+                      <option value={5}>5 (Clear, impressive description of problem-solving processes)</option>
                     </select>
                   </div>
 
+                  <br/>
+                  <br/>
+
                   {/* Essay Question 2 */}
                   <div className="horizontal-box">
+                    <h4 style={{color: '#ec6f34'}}>Question 2</h4>
                     <label htmlFor="essay2">
-                      Question 2: Tell us about a community that’s especially important to you: how did you contribute to this community, and what makes it so inspiring? 
+                      Tell us about a community that’s especially important to you: how did you contribute to this community, and what makes it so inspiring?
                     </label>
                     <p>{userInfo[0].answer2}</p>
 
@@ -350,22 +412,38 @@ const GraderForm = () => {
                     />
 
                     <label htmlFor="answer2Rating">
-                      Choose a rating for this response:
+                      How well does the applicant demonstrate their ability to commit to a community? 
                     </label>
-                    <select className="dropbtn" name="answer2Rating" value={answer2Rating} onChange={(event) => { setanswer2Rating(event.target.value) }}>
+                    <select className="dropbtn" name="commitment" value={ansCommit} onChange={(event) => { setAnsCommit(event.target.value) }}>
                       <option value="" disabled={true}>Choose a rating:</option>
-                      <option value={1}>1</option>
+                      <option value={1}>1 (Not at all)</option>
                       <option value={2}>2</option>
                       <option value={3}>3</option>
                       <option value={4}>4</option>
-                      <option value={5}>5</option>
+                      <option value={5}>5 (Exhibiting strong willingness to commit to a community)</option>
+                    </select>
+
+                    <label htmlFor="answer2Rating">
+                      To what extent has the applicant impacted their community? 
+                    </label>
+                    <select className="dropbtn" name="impact" value={impact} onChange={(event) => { setImpact(event.target.value) }}>
+                      <option value="" disabled={true}>Choose a rating:</option>
+                      <option value={1}>1 (No sign at all)</option>
+                      <option value={2}>2</option>
+                      <option value={3}>3</option>
+                      <option value={4}>4</option>
+                      <option value={5}>5 (Significant impacts to the community)</option>
                     </select>
                   </div>
 
+                  <br/>
+                  <br/>
+
                   {/* Essay Question 3 */}
                   <div className="horizontal-box">
+                    <h4 style={{color: '#ec6f34'}}>Question 3</h4>
                     <label htmlFor="essay3">
-                      Question 3: Tell us about a technical (not necessarily CS-related; could be robotics, graphic design, etc.) project you’ve worked on in the past.
+                      Tell us about a technical (not necessarily CS-related; could be robotics, graphic design, etc.) project you’ve worked on in the past.
                     </label>
                     <p>{userInfo[0].answer3}</p>
 
@@ -380,23 +458,36 @@ const GraderForm = () => {
                     />
 
                     <label htmlFor="answer3Rating">
-                      Choose a rating for this response:
+                      How well does the applicant exhibit a sense of passion for learning and solving problems?
                     </label>
-                    <select className="dropbtn" name="answer3Rating" value={answer3Rating} onChange={(event) => { setanswer3Rating(event.target.value) }}>
+                    <select className="dropbtn" name="passion" value={passion} onChange={(event) => { setPassion(event.target.value) }}>
                       <option value="" disabled={true}>Choose a rating:</option>
-                      <option value={1}>1</option>
+                      <option value={1}>1 (No sign at all)</option>
                       <option value={2}>2</option>
                       <option value={3}>3</option>
                       <option value={4}>4</option>
-                      <option value={5}>5</option>
+                      <option value={5}>5 (An avid passion is exhibited)</option>
+                    </select>
+
+                    <label htmlFor="answer3Rating">
+                      To what extent did the applicant go above and beyond in their project? 
+                    </label>
+                    <select className="dropbtn" name="passion" value={excellence} onChange={(event) => { setExcellence(event.target.value) }}>
+                      <option value="" disabled={true}>Choose a rating:</option>
+                      <option value={1}>1 (No sign at all)</option>
+                      <option value={2}>2</option>
+                      <option value={3}>3</option>
+                      <option value={4}>4</option>
+                      <option value={5}>5 (Impressive excellence is shown)</option>
                     </select>
                   </div>
 
+                  <br/>
+                  <br/>
+
                   {/* Time Commitments */}
                   <div className="horizontal-box">
-                    <label htmlFor="commitments">
-                      Time Commitments
-                    </label>
+                    <h4 style={{color: '#ec6f34'}}>Time Commitments</h4>
                     <p>{userInfo[0].commitments}</p>
 
                     <label htmlFor="comment4">Comment</label>
@@ -409,16 +500,14 @@ const GraderForm = () => {
                       onChange={(event) => { setComment4(event.target.value) }}
                     />
 
-                    <label htmlFor="commitmentRating">
-                      Choose a rating for the applicant's commitments:
+                    <label htmlFor="commitment">
+                      Do the applicant's commitments seem concerning (WAY too many clubs, insane unit count, etc.)?
                     </label>
-                    <select className="dropbtn" name="commitmentRating" value={commitmentRating} onChange={(event) => { setcommitmentRating(event.target.value) }}>
+                    <select className="dropbtn" name="commitment" value={commitment} onChange={(event) => { setcommitment(event.target.value) }}>
                       <option value="" disabled={true}>Choose a rating:</option>
-                      <option value={1}>1</option>
-                      <option value={2}>2</option>
-                      <option value={3}>3</option>
-                      <option value={4}>4</option>
-                      <option value={5}>5</option>
+                      <option value={3}>Not at all</option>
+                      <option value={2}>Could be a problem</option>
+                      <option value={1}>RED FLAG</option>
                     </select>
                   </div>
 
@@ -437,11 +526,12 @@ const GraderForm = () => {
                 </form>
               </div>
             </div>
-          )}
-        </Formik>
-      </div>
+          )
+          }
+        </Formik >
+      </div >
       <br />
-    </ThemeProvider>
+    </ThemeProvider >
   );
 };
 

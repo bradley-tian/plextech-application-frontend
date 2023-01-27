@@ -482,6 +482,7 @@ function AdminConsole() {
                                     })
                                 }).then(() => {
                                     setGraderMessage("Successfully added grader " + values.email + ".")
+                                    values.email = "";
                                 });
                             } else if (action1 === "remove") {
                                 await fetch('https://plextech-application-backend-production.up.railway.app/remove_grader', {
@@ -492,6 +493,7 @@ function AdminConsole() {
                                     })
                                 }).then(() => {
                                     setGraderMessage("Successfully removed grader " + values.email + ".")
+                                    values.email = "";
                                 });
                             }
                         }}
