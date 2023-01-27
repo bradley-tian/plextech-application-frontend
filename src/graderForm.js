@@ -101,6 +101,7 @@ const GraderForm = () => {
             firstName: applicant.first_name,
             lastName: applicant.last_name,
             resume: resumeURL,
+            roles: applicant.desired_roles,
             answer1: applicant.answer1,
             answer2: applicant.answer2,
             answer3: applicant.answer3,
@@ -161,6 +162,7 @@ const GraderForm = () => {
             firstName: userInfo[0].firstName,
             lastName: userInfo[0].lastName,
             resume: userInfo[0].resumeURL,
+            roles: JSON.stringify(userInfo[0].roles),
             answer1: userInfo[0].answer1,
             answer2: userInfo[0].answer2,
             answer3: userInfo[0].answer3,
@@ -289,6 +291,11 @@ const GraderForm = () => {
                   <label htmlFor="linkedin">LinkedIn</label>
                   <div className="horizontal-box">
                     <p>{typeof userInfo[0].linkedin != typeof undefined ? userInfo[0].linkedin : 'None'}</p>
+                  </div>
+
+                  <label htmlFor="roles">Desired roles</label>
+                  <div className="horizontal-box">
+                    <p>{typeof userInfo[0].roles != typeof undefined ? userInfo[0].roles.toString() : "Member"}</p>
                   </div>
 
                   <h4 style={{color: '#ec6f34'}}>Resume/CV</h4>
