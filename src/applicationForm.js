@@ -423,6 +423,7 @@ const ApplicationForm = () => {
                           <option value={"Asian (including Indian subcontinent and Philippines origin)"}>Asian (including Indian subcontinent and Philippines origin)</option>
                           <option value={"Black or African American"}>Black or African American</option>
                           <option value={"White"}>White</option>
+                          <option value={"Hispanic or Latino"}>Hispanic or Latino</option>
                           <option value={"Middle Eastern"}>Middle Eastern</option>
                           <option value={"Native American or Other Pacific Islander"}>Native American or Other Pacific Islander</option>
                           <option value={"Prefer not to answer"}>Prefer not to answer</option>

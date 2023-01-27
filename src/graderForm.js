@@ -38,11 +38,12 @@ const GraderForm = () => {
     website: "",
     race: "",
   }]);
-  const [rating0, setRating0] = useState("1");
-  const [rating1, setRating1] = useState("1");
-  const [rating2, setRating2] = useState("1");
-  const [rating3, setRating3] = useState("1");
-  const [rating4, setRating4] = useState("1");
+  const [resumeRating, setresumeRating] = useState("1");
+  const [answer1Rating, setanswer1Rating] = useState("1");
+  const [answer2Rating, setanswer2Rating] = useState("1");
+  const [answer3Rating, setanswer3Rating] = useState("1");
+  const [commitmentRating, setcommitmentRating] = useState("1");
+
 
   const [comment0, setComment0] = useState('');
   const [comment1, setComment1] = useState('');
@@ -170,15 +171,15 @@ const GraderForm = () => {
               body: JSON.stringify({
                 grader: state.email,
                 comment0: comment0,
-                rating0: rating0,
+                resumeRating: resumeRating,
                 comment1: comment1,
-                rating1: rating1,
+                answer1Rating: answer1Rating,
                 comemnt2: comment2,
-                rating2: rating2,
+                answer2Rating: answer2Rating,
                 comment3: comment3,
-                rating3: rating3,
+                answer3Rating: answer3Rating,
                 comment4: comment4,
-                rating4: rating4,
+                commitmentRating: commitmentRating,
                 applicantID: userInfo[0].timestamp,
               }),
             })
@@ -190,11 +191,11 @@ const GraderForm = () => {
                 }
                 setData(newData);
                 window.scrollTo(0, 0);
-                setRating0('1');
-                setRating1('1');
-                setRating2('1');
-                setRating3('1');
-                setRating4('1');
+                setresumeRating('1');
+                setanswer1Rating('1');
+                setanswer2Rating('1');
+                setanswer3Rating('1');
+                setcommitmentRating('1');
                 setComment0('');
                 setComment1('');
                 setComment2('');
@@ -287,10 +288,10 @@ const GraderForm = () => {
                       onChange={(event) => { setComment0(event.target.value) }}
                     />
 
-                    <label htmlFor="rating0">
+                    <label htmlFor="resumeRating">
                       Overall resume quality:
                     </label>
-                    <select className="dropbtn" name="rating0" value={rating0} onChange={(event) => { setRating0(event.target.value) }}>
+                    <select className="dropbtn" name="resumeRating" value={resumeRating} onChange={(event) => { setresumeRating(event.target.value) }}>
                       <option value="" disabled={true}>Choose a rating:</option>
                       <option value={1}>1</option>
                       <option value={2}>2</option>
@@ -318,10 +319,10 @@ const GraderForm = () => {
                       onChange={(event) => { setComment1(event.target.value) }}
                     />
 
-                    <label htmlFor="rating1">
+                    <label htmlFor="answer1Rating">
                       Choose a rating for this response:
                     </label>
-                    <select className="dropbtn" name="rating1" value={rating1} onChange={(event) => { setRating1(event.target.value) }}>
+                    <select className="dropbtn" name="answer1Rating" value={answer1Rating} onChange={(event) => { setanswer1Rating(event.target.value) }}>
                       <option value="" disabled={true}>Choose a rating:</option>
                       <option value={1}>1</option>
                       <option value={2}>2</option>
@@ -348,10 +349,10 @@ const GraderForm = () => {
                       onChange={(event) => { setComment2(event.target.value) }}
                     />
 
-                    <label htmlFor="rating2">
+                    <label htmlFor="answer2Rating">
                       Choose a rating for this response:
                     </label>
-                    <select className="dropbtn" name="rating2" value={rating2} onChange={(event) => { setRating2(event.target.value) }}>
+                    <select className="dropbtn" name="answer2Rating" value={answer2Rating} onChange={(event) => { setanswer2Rating(event.target.value) }}>
                       <option value="" disabled={true}>Choose a rating:</option>
                       <option value={1}>1</option>
                       <option value={2}>2</option>
@@ -378,10 +379,10 @@ const GraderForm = () => {
                       onChange={(event) => { setComment3(event.target.value) }}
                     />
 
-                    <label htmlFor="rating3">
+                    <label htmlFor="answer3Rating">
                       Choose a rating for this response:
                     </label>
-                    <select className="dropbtn" name="rating3" value={rating3} onChange={(event) => { setRating3(event.target.value) }}>
+                    <select className="dropbtn" name="answer3Rating" value={answer3Rating} onChange={(event) => { setanswer3Rating(event.target.value) }}>
                       <option value="" disabled={true}>Choose a rating:</option>
                       <option value={1}>1</option>
                       <option value={2}>2</option>
@@ -408,10 +409,10 @@ const GraderForm = () => {
                       onChange={(event) => { setComment4(event.target.value) }}
                     />
 
-                    <label htmlFor="rating4">
+                    <label htmlFor="commitmentRating">
                       Choose a rating for the applicant's commitments:
                     </label>
-                    <select className="dropbtn" name="rating4" value={rating4} onChange={(event) => { setRating4(event.target.value) }}>
+                    <select className="dropbtn" name="commitmentRating" value={commitmentRating} onChange={(event) => { setcommitmentRating(event.target.value) }}>
                       <option value="" disabled={true}>Choose a rating:</option>
                       <option value={1}>1</option>
                       <option value={2}>2</option>
