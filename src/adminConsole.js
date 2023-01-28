@@ -19,6 +19,8 @@ function AdminConsole() {
     const [results, setResults] = useState([]);
     const [applications, setApplications] = useState([]);
     const [evaluations, setEvaluations] = useState([]);
+    const [incomplete, setIncomplete] = useState([]);
+
 
     const theme = createTheme({
         status: {
@@ -89,6 +91,7 @@ function AdminConsole() {
         getApplications();
         getEvaluations();
         loadResultAnalytics();
+        getIncomplete();
     }, []);
 
     useEffect(() => {
@@ -449,6 +452,21 @@ function AdminConsole() {
         }
     }
 
+    async function getIncomplete() {
+        await fetch("https://plextech-application-backend-production.up.railway.app/check_progress", {
+                method: 'GET',
+            })
+                .then((response) => {
+                    return response.json();
+                })
+                .then((data) => {
+                    setIncomplete(data);
+                })
+                .catch((err) => {
+                    console.log(err.message);
+                });
+    }
+
     return (
         <>
             <ThemeProvider theme={theme}>
@@ -482,7 +500,6 @@ function AdminConsole() {
                                     })
                                 }).then(() => {
                                     setGraderMessage("Successfully added grader " + values.email + ".")
-                                    values.email = "";
                                 });
                             } else if (action1 === "remove") {
                                 await fetch('https://plextech-application-backend-production.up.railway.app/remove_grader', {
@@ -493,7 +510,6 @@ function AdminConsole() {
                                     })
                                 }).then(() => {
                                     setGraderMessage("Successfully removed grader " + values.email + ".")
-                                    values.email = "";
                                 });
                             }
                         }}
@@ -572,6 +588,11 @@ function AdminConsole() {
                     <div className='horizontal-box'>
                         <h2>Result Analytics</h2>
                         <ResultsAnalytics />
+                    </div>
+
+                    <div className='horizontal-box'>
+                        <h2>Progress Check</h2>
+                        <p>{incomplete.toString()}</p>
                     </div>
 
                     <div className="horizontal-box">
