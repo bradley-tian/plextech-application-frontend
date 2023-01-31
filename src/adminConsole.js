@@ -8,6 +8,7 @@ import { ExportToCsv } from 'export-to-csv';
 
 function AdminConsole() {
 
+    const URL = "http://127.0.0.1:5000";
     const { state } = useLocation();
     const navigate = useNavigate();
     const [graderMessage, setGraderMessage] = useState("");
@@ -39,7 +40,7 @@ function AdminConsole() {
 
 
     async function fetchGraderData() {
-        await fetch("https://plextech-application-backend-production.up.railway.app/get_graders", {
+        await fetch(`${URL}/get_graders`, {
             method: 'GET',
         })
             .then((response) => {
@@ -59,7 +60,7 @@ function AdminConsole() {
 
     useEffect(() => {
         async function checkUser(value) {
-            await fetch('https://plextech-application-backend-production.up.railway.app/check_admin', {
+            await fetch(`${URL}/check_admin`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -110,7 +111,7 @@ function AdminConsole() {
     })
 
     async function loadAnalytics() {
-        await fetch("https://plextech-application-backend-production.up.railway.app/analytics", {
+        await fetch(`${URL}/analytics`, {
             method: 'GET',
         })
             .then((response) => {
@@ -167,7 +168,7 @@ function AdminConsole() {
     const [assignments, setAssignments] = useState({})
 
     async function assignGraders() {
-        await fetch("https://plextech-application-backend-production.up.railway.app/assign_graders", {
+        await fetch(`${URL}/assign_graders`, {
             method: 'GET',
         })
             .then((response) => {
@@ -213,7 +214,7 @@ function AdminConsole() {
     }
 
     async function getResults() {
-        await fetch('https://plextech-application-backend-production.up.railway.app/export_results', {
+        await fetch(`${URL}/export_results`, {
             method: 'GET',
         })
             .then((response) => {
@@ -263,7 +264,7 @@ function AdminConsole() {
     }
 
     async function getApplications() {
-        await fetch('https://plextech-application-backend-production.up.railway.app/export_applications', {
+        await fetch(`${URL}/export_applications`, {
             method: 'GET',
         })
             .then((response) => {
@@ -313,7 +314,7 @@ function AdminConsole() {
     }
 
     async function getEvaluations() {
-        await fetch('https://plextech-application-backend-production.up.railway.app/evaluate_results', {
+        await fetch(`${URL}/evaluate_results`, {
             method: 'GET',
             headers: {
                 'Access-Control-Allow-Origin': '*',
@@ -438,7 +439,7 @@ function AdminConsole() {
     const [flushMessage, setFlushMessage] = useState('');
     async function flushDatabase() {
         if (adminKey === 'plextechpermission') {
-            await fetch("https://plextech-application-backend-production.up.railway.app/flush_database", {
+            await fetch(`${URL}/flush_database`, {
                 method: 'GET',
             })
                 .then(() => {
@@ -453,7 +454,7 @@ function AdminConsole() {
     }
 
     async function getIncomplete() {
-        await fetch("https://plextech-application-backend-production.up.railway.app/check_progress", {
+        await fetch(`${URL}/check_progress`, {
                 method: 'GET',
             })
                 .then((response) => {
@@ -492,7 +493,7 @@ function AdminConsole() {
                         }}
                         onSubmit={async (values) => {
                             if (action1 === "add") {
-                                await fetch('https://plextech-application-backend-production.up.railway.app/add_grader', {
+                                await fetch(`${URL}/add_grader`, {
                                     method: 'POST',
                                     headers: { 'Content-Type': 'application/json' },
                                     body: JSON.stringify({
@@ -502,7 +503,7 @@ function AdminConsole() {
                                     setGraderMessage("Successfully added grader " + values.email + ".")
                                 });
                             } else if (action1 === "remove") {
-                                await fetch('https://plextech-application-backend-production.up.railway.app/remove_grader', {
+                                await fetch(`${URL}/remove_grader`, {
                                     method: 'POST',
                                     headers: { 'Content-Type': 'application/json' },
                                     body: JSON.stringify({
