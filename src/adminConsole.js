@@ -8,7 +8,7 @@ import { ExportToCsv } from 'export-to-csv';
 
 function AdminConsole() {
 
-    const URL = "http://127.0.0.1:5000";
+    const URL = "plextech-application-backend-production.up.railway.app";
     const { state } = useLocation();
     const navigate = useNavigate();
     const [graderMessage, setGraderMessage] = useState("");
