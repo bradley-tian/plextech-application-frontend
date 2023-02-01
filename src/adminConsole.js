@@ -8,7 +8,7 @@ import { ExportToCsv } from 'export-to-csv';
 
 function AdminConsole() {
 
-    const URL = "plextech-application-backend-production.up.railway.app";
+    const URL = "http://127.0.0.1:5000";
     const { state } = useLocation();
     const navigate = useNavigate();
     const [graderMessage, setGraderMessage] = useState("");
@@ -91,7 +91,6 @@ function AdminConsole() {
         getResults();
         getApplications();
         getEvaluations();
-        loadResultAnalytics();
         getIncomplete();
     }, []);
 
@@ -101,7 +100,7 @@ function AdminConsole() {
 
     const [analyticData, setAnalyticData] = useState({
         count: "N/A",
-        freshmen: "N/A",
+        freshman: "N/A",
         sophomore: "N/A",
         junior: "N/A",
         senior: "N/A",
@@ -134,7 +133,7 @@ function AdminConsole() {
                     <br/>
                     <li>Grade</li>
                     <br/>
-                    <li>Freshmen: {analyticData.freshmen} ({((analyticData.freshmen / analyticData.count) * 100).toFixed(2)}%)</li>
+                    <li>Freshmen: {analyticData.freshman} ({((analyticData.freshman / analyticData.count) * 100).toFixed(2)}%)</li>
                     <li>Sophomore: {analyticData.sophomore} ({((analyticData.sophomore / analyticData.count) * 100).toFixed(2)}%)</li>
                     <li>Junior: {analyticData.junior} ({((analyticData.junior / analyticData.count) * 100).toFixed(2)}%)</li>
                     <li>Senior: {analyticData.senior} ({((analyticData.senior / analyticData.count) * 100).toFixed(2)}%)</li>
@@ -192,7 +191,7 @@ function AdminConsole() {
                     color="neutral"
                     onClick={assignGraders}
                     className="assignGraders"
-                >Auto Assign Graders</Button>
+                >Assign Graders / View Assignments</Button>
 
                 <h4>Current Assignments</h4>
                 <div>
@@ -366,75 +365,6 @@ function AdminConsole() {
         )
     }
 
-    const [resultAnalytics, setResultAnalytics] = useState({});
-
-    function loadResultAnalytics() {
-        const reviews = results.slice(1);
-
-        const judgments = {};
-        for (let grader of graders) {
-            judgments[grader[1]] = {
-                'rating0': [0],
-                'rating1': [0],
-                'rating2': [0],
-                'rating3': [0],
-                'rating4': [0],
-            };
-        }
-
-        for (let review of reviews) {
-            judgments[review['grader']]['rating0'].push(parseInt(review['rating0']));
-            judgments[review['grader']]['rating1'].push(parseInt(review['rating1']));
-            judgments[review['grader']]['rating2'].push(parseInt(review['rating2']));
-            judgments[review['grader']]['rating3'].push(parseInt(review['rating3']));
-            judgments[review['grader']]['rating4'].push(parseInt(review['rating4']));
-        }
-
-        for (let g of Object.keys(judgments)) {
-            const count = judgments[g]['rating0'].length - 1
-            judgments[g]['rating0'] = (judgments[g]['rating0'].reduce((a, b) => a + b) / count).toFixed(2);
-            judgments[g]['rating1'] = (judgments[g]['rating1'].reduce((a, b) => a + b) / count).toFixed(2);
-            judgments[g]['rating2'] = (judgments[g]['rating2'].reduce((a, b) => a + b) / count).toFixed(2);
-            judgments[g]['rating3'] = (judgments[g]['rating3'].reduce((a, b) => a + b) / count).toFixed(2);
-            judgments[g]['rating4'] = (judgments[g]['rating4'].reduce((a, b) => a + b) / count).toFixed(2);
-        }
-
-        setResultAnalytics(judgments);
-    }
-
-    function ResultsAnalytics() {
-
-        const keys = ['rating0', 'rating1', 'rating2', 'rating3', 'rating4'];
-
-        return (
-            <>
-                <h4>Grader Rating Averages</h4>
-                <div>
-
-                    {keys.map(key => {
-                        return (
-                            <div>
-                                <h6>{key}</h6>
-                                <ul>
-                                    {Object.keys(resultAnalytics).map(grader => (
-                                        <li>{grader}: {resultAnalytics[grader][key]}</li>
-                                    ))}
-                                </ul>
-                            </div>
-                        );
-                    })}
-                </div>
-                <Button
-                    style={{ display: "flex" }}
-                    variant="contained"
-                    color="neutral"
-                    onClick={loadResultAnalytics}
-                    className="loadResultAnalytics"
-                >Refresh Results Analytics</Button>
-            </>
-        )
-    }
-
     const [adminKey, setAdminKey] = useState('');
     const [flushMessage, setFlushMessage] = useState('');
     async function flushDatabase() {
@@ -587,12 +517,8 @@ function AdminConsole() {
                     </div>
 
                     <div className='horizontal-box'>
-                        <h2>Result Analytics</h2>
-                        <ResultsAnalytics />
-                    </div>
-
-                    <div className='horizontal-box'>
                         <h2>Progress Check</h2>
+                        <p>Any grader who has not completed their assignments will be listed here.</p>
                         <p>{incomplete.toString()}</p>
                     </div>
 
