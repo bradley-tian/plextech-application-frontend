@@ -23,13 +23,13 @@ const theme = createTheme({
 
 function MemberLoginPage() {
     const navigate = useNavigate();
-    const clientID = "834809423110-fg16i98bh4h8uvoguvjsf5srrkabvsbq.apps.googleusercontent.com";
+    const clientID = process.env.REACT_APP_GOOGLE_CLIENT;
     const [loginMessage, setMessage] = useState("");
 
     async function handleResponse(response) {
         var userObject = jwt_decode(response.credential);
         const email = userObject.email;
-        await fetch('https://plextech-application-backend-production.up.railway.app/check_grader', {
+        await fetch(`${process.env.REACT_APP_API_URL}/check_grader`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

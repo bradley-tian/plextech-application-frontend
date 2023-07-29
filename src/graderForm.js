@@ -66,7 +66,7 @@ const GraderForm = () => {
 
   //Load Applicant Data
   async function fetchData() {
-    let url = "https://plextech-application-backend-production.up.railway.app/get_applicant/" + state.email
+    let url = `${process.env.REACT_APP_API_URL}/get_applicant/` + state.email
     await fetch(url, {
       method: 'GET',
     })
@@ -126,7 +126,7 @@ const GraderForm = () => {
 
     //Authentication Check
     async function checkUser(value) {
-      await fetch('https://plextech-application-backend-production.up.railway.app/check_grader', {
+      await fetch(`${process.env.REACT_APP_API_URL}/check_grader`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -173,7 +173,7 @@ const GraderForm = () => {
           }}
           onSubmit={async () => {
             setLoading('Submitting your application; please wait...');
-            await fetch('https://plextech-application-backend-production.up.railway.app/add_review', {
+            await fetch(`${process.env.REACT_APP_API_URL}/add_review`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({

@@ -12,12 +12,11 @@ import FunnyDog from './funnyDog';
 import { Routes, Route } from "react-router-dom"
 
 function App() {
-
     return (
         <div className = 'App'>
             <Routes>
                 <Route path='/' element={<Home/>}/>
-                {/* <Route path='apply' element={<ApplicationForm/>}/> */}
+                <Route path='apply' element={<ApplicationForm/>}/>
                 <Route path='grading' element={<GradingInterface email=""/>}/>
                 <Route path='success' element={<SuccessPage/>}/>
                 <Route path='complete' element={<CompletionPage/>}/>

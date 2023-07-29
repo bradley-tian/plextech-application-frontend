@@ -46,11 +46,11 @@ function Home() {
                 <div className="home-container">
                     <img src={PlexTechLogo} alt="plextech logo" style={{ display: 'block', width: '35px', left: '85%', top: '12%', }} />
                     <h2 style={{ display: 'block' }}>Welcome to the PlexTech Application Platform!</h2>
-                    {/* <h4>If you are an applicant, please proceed to the application form.</h4> */}
-                    <h4 style={{color: '#ec6f34'}}>Applications are closed for Spring 2023. Thank you for your interest in PlexTech!</h4>
+                    <h4>If you are an applicant, please proceed to the application form.</h4>
+                    {/* <h4 style={{color: '#ec6f34'}}>Applications are closed for Spring 2023. Thank you for your interest in PlexTech!</h4> */}
                     <div className="home">
 
-                        {/* <Button style={{
+                        <Button style={{
                             "fontFamily": "DM Sans",
                             "marginBottom": "2rem",
                             "display": "block",
@@ -59,7 +59,7 @@ function Home() {
                             onClick={navToApplication}
                             variant="contained"
                             color="neutral"
-                        >Application Form</Button> */}
+                        >Application Form</Button>
 
                         <Button style={{
                             "fontFamily": "DM Sans",

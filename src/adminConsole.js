@@ -8,7 +8,7 @@ import { ExportToCsv } from 'export-to-csv';
 
 function AdminConsole() {
 
-    const URL = "http://127.0.0.1:5000";
+    const URL = process.env.REACT_APP_API_URL;
     const { state } = useLocation();
     const navigate = useNavigate();
     const [graderMessage, setGraderMessage] = useState("");
@@ -21,6 +21,7 @@ function AdminConsole() {
     const [applications, setApplications] = useState([]);
     const [evaluations, setEvaluations] = useState([]);
     const [incomplete, setIncomplete] = useState([]);
+    const [assignmentsCleared, setAssignmentsCleared] = useState([]);
 
 
     const theme = createTheme({
@@ -58,6 +59,7 @@ function AdminConsole() {
             });
     }
 
+    //Refresh boot-up procedures
     useEffect(() => {
         async function checkUser(value) {
             await fetch(`${URL}/check_admin`, {
@@ -92,6 +94,7 @@ function AdminConsole() {
         getApplications();
         getEvaluations();
         getIncomplete();
+        setAssignmentsCleared(false)
     }, []);
 
     useEffect(() => {
@@ -130,22 +133,22 @@ function AdminConsole() {
             <>
                 <ul>
                     <li>Total Application Count: {analyticData.count}</li>
-                    <br/>
+                    <br />
                     <li>Grade</li>
-                    <br/>
+                    <br />
                     <li>Freshmen: {analyticData.freshman} ({((analyticData.freshman / analyticData.count) * 100).toFixed(2)}%)</li>
                     <li>Sophomore: {analyticData.sophomore} ({((analyticData.sophomore / analyticData.count) * 100).toFixed(2)}%)</li>
                     <li>Junior: {analyticData.junior} ({((analyticData.junior / analyticData.count) * 100).toFixed(2)}%)</li>
                     <li>Senior: {analyticData.senior} ({((analyticData.senior / analyticData.count) * 100).toFixed(2)}%)</li>
-                    <br/>
+                    <br />
                     <li>Gender</li>
-                    <br/>
+                    <br />
                     <li>Male: {analyticData.male} ({((analyticData.male / analyticData.count) * 100).toFixed(2)}%)</li>
                     <li>Female: {analyticData.female} ({((analyticData.female / analyticData.count) * 100).toFixed(2)}%)</li>
                     <li>Other Genders: {analyticData.other} ({((analyticData.other / analyticData.count) * 100).toFixed(2)}%)</li>
-                    <br/>
+                    <br />
                     <li>Ethnicity</li>
-                    <br/>
+                    <br />
                     <li>American Indian: {analyticData.American_Indian} ({((analyticData.American_Indian / analyticData.count) * 100).toFixed(2)}%)</li>
                     <li>Asian: {analyticData.Asian} ({((analyticData.Asian / analyticData.count) * 100).toFixed(2)}%)</li>
                     <li>Black: {analyticData.Black} ({((analyticData.Black / analyticData.count) * 100).toFixed(2)}%)</li>
@@ -181,6 +184,15 @@ function AdminConsole() {
             });
     }
 
+    async function clearAssignments() {
+        await fetch(`${URL}/clear_assignments`, {
+            method: 'DELETE',
+        })
+            .then(() => {
+                setAssignmentsCleared(true);
+            });
+    }
+
     function Assignment() {
 
         return (
@@ -192,7 +204,15 @@ function AdminConsole() {
                     onClick={assignGraders}
                     className="assignGraders"
                 >Assign Graders / View Assignments</Button>
-
+                <br />
+                <Button
+                    style={{ display: "flex" }}
+                    variant="contained"
+                    color="neutral"
+                    onClick={clearAssignments}
+                    className="clearAssignments"
+                >Clear All Assignments</Button>
+                {assignmentsCleared ? <p>Cleared all assignments</p> : <></>}
                 <h4>Current Assignments</h4>
                 <div>
                     {Object.keys(assignments).map(key => {
@@ -317,7 +337,7 @@ function AdminConsole() {
             method: 'GET',
             headers: {
                 'Access-Control-Allow-Origin': '*',
-              },
+            },
         })
             .then((response) => {
                 return (response.json());
@@ -385,17 +405,17 @@ function AdminConsole() {
 
     async function getIncomplete() {
         await fetch(`${URL}/check_progress`, {
-                method: 'GET',
+            method: 'GET',
+        })
+            .then((response) => {
+                return response.json();
             })
-                .then((response) => {
-                    return response.json();
-                })
-                .then((data) => {
-                    setIncomplete(data);
-                })
-                .catch((err) => {
-                    console.log(err.message);
-                });
+            .then((data) => {
+                setIncomplete(data);
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
     }
 
     return (

@@ -13,6 +13,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "buffer": "^6.0.3",
+    "env-cmd": "^10.1.0",
     "export-to-csv": "^0.2.1",
     "formik": "^2.2.9",
     "jwt-decode": "^3.1.2",
@@ -26,9 +27,9 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "env-cmd -f .env.testing react-scripts start",
+    "build": "env-cmd -f .env.production react-scripts build",
+    "test": "env-cmd -f .env.testing react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -50,6 +51,6 @@
     ]
   },
   "devDependencies": {
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.3.1"
   }
 }

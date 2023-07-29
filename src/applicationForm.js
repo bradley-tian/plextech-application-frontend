@@ -10,6 +10,11 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
+
+//Hot-Swappable Information
+const semester = "Fall 2023"
+const current_grad_year = 2024
+
 //Theme Configuration
 const theme = createTheme({
   status: {
@@ -100,9 +105,7 @@ const ApplicationForm = () => {
   const [year, setYear] = React.useState('2023');
   const [gender, setGender] = React.useState('');
   const [race, setRace] = React.useState('');
-
   const [loadingMessage, setLoading] = React.useState('');
-
   const [firstNameMessage, setFirst] = React.useState('');
   const [lastNameMessage, setLast] = React.useState('');
   const [emailMessage, setEmail] = React.useState('');
@@ -248,7 +251,7 @@ const ApplicationForm = () => {
                 }
                 if (flagged === false) {
                   setLoading('Submitting your application; please wait...')
-                  await fetch('https://plextech-application-backend-production.up.railway.app/add_applicant', {
+                  await fetch(`${process.env.REACT_APP_API_URL}/add_applicant`, {
                     method: 'POST',
                     headers: {
                       'Content-Type': 'application/json',
@@ -279,7 +282,7 @@ const ApplicationForm = () => {
                     if (response.ok) {
                       navigate('/success', { replace: true, state: { UID: values.timestamp } });
                     } else {
-                      fetch('https://plextech-application-backend-production.up.railway.app/report_error',
+                      fetch(`${process.env.REACT_APP_API_URL}/report_error`,
                         {
                           method: 'POST',
                           headers: {
@@ -322,7 +325,7 @@ const ApplicationForm = () => {
                   <div>
                     <div className="title-headers">
                       <img src={PlexTechLogo} alt="react logo" style={{ width: '80px', }} />
-                      <h1>PlexTech Application - Spring 2023</h1>
+                      <h1>PlexTech Application - {semester}</h1>
 
                       <br />
                       <h4>Thank you for your interest in PlexTech!<br />Please fill out the information below and we will get back to you soon. </h4>
@@ -378,10 +381,10 @@ const ApplicationForm = () => {
                         <label htmlFor="graduationYear">Graduation Year</label>
                         <select className="dropbtn" name="year" value={year} onChange={(event) => { setYear(event.target.value) }}>
                           <option value="" disabled={true}>Choose your graduation year:</option>
-                          <option value={"2023"}>2023</option>
-                          <option value={"2024"}>2024</option>
-                          <option value={"2025"}>2025</option>
-                          <option value={"2026"}>2026</option>
+                          <option value={(current_grad_year).toString()}>{current_grad_year}</option>
+                          <option value={(current_grad_year + 1).toString()}>{current_grad_year + 1}</option>
+                          <option value={(current_grad_year + 2).toString()}>{current_grad_year + 2}</option>
+                          <option value={(current_grad_year + 3).toString()}>{current_grad_year + 3}</option>
                         </select>
                       </div>
 
