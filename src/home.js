@@ -4,7 +4,6 @@ import Button from '@mui/material/Button';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import PlexTechLogo from './PlexTechLogo.png'
 import "./styles.css"
-import Plexie from "./Plexie.jpg"
 
 function Home() {
 

@@ -178,6 +178,7 @@ function AdminConsole() {
             })
             .then((data) => {
                 setAssignments(data);
+                console.log(`Successfully retrieved ${Object.keys(data).length} assignments.`)
             })
             .catch((err) => {
                 console.log(err.message);
