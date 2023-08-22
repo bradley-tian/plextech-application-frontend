@@ -44,8 +44,8 @@ const MenuProps = {
 };
 
 const roles = [
-  'Member',
-  'Curriculum Instructor',
+  'Curriculum Developer',
+  'Project Developer',
 ];
 
 function getStyles(role, roles, theme) {
