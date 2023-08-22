@@ -420,6 +420,7 @@ const ApplicationForm = () => {
                         <label htmlFor="race">
                           Your Demographic Background
                         </label>
+                        <p>Please be ensured that this has absolutely no impact on your application.</p>
                         <select className="dropbtn" name="race" value={race} onChange={(event) => { setRace(event.target.value) }}>
                           <option value="" disabled={true}>Select from below:</option>
                           <option value={"American Indian or Alaska Native"}>American Indian or Alaska Native</option>
@@ -472,7 +473,8 @@ const ApplicationForm = () => {
 
                       {/* Long Answer 1 */}
                       <div className="horizontal-box">
-                        <label htmlFor="answer1">Describe how you have taken advantage of a significant opportunity or worked to overcome a barrier you have faced.</label>
+                        <label htmlFor="answer1">Why do you want to join PlexTech?</label>
+                        <p>Please elaborate on your understanding of PlexTech and its culture. Feel free to refer to our infosession slides!</p>
                         <p>(~200 words)</p>
                         <textarea
                           id='answer1'
@@ -484,7 +486,11 @@ const ApplicationForm = () => {
 
                       {/* Long Answer 2 */}
                       <div className="horizontal-box">
-                        <label htmlFor="answer2">Tell us about a community that’s especially important to you: how did you contribute to this community, and what makes it so inspiring? </label>
+                        <label htmlFor="answer2">Tell us about a community that’s especially important to you. </label>
+                        <p>
+                          Why did you join the community? What did you learn/gain from it from the experience? How did you give back to the community?
+                          Please feel free to mention specific moments of learning/impact.
+                        </p>
                         <p>(~200 words)</p>
                         <textarea
                           id='answer2'
@@ -495,7 +501,11 @@ const ApplicationForm = () => {
 
                       {/* Long Answer 3 */}
                       <div className="horizontal-box">
-                        <label htmlFor="answer3">Discuss a technical (not necessarily CS-related; could be robotics, graphic design, etc.) project you’ve worked on in the past.</label>
+                        <label htmlFor="answer3">Please tell us about a time when you "hacked a system."</label>
+                        <p>
+                          This does not have to be computer-related. It could be life hacks, loopholes, etc. 
+                          In other words, please tell us about a creative/unorthodox route you implemented to solve a problem.
+                        </p>
                         <p>(~200 words)</p>
                         <textarea
                           id='answer3'
@@ -507,6 +517,9 @@ const ApplicationForm = () => {
                       {/* EC Commitments */}
                       <div className="horizontal-box">
                         <label htmlFor="commitments">Please tell us about your commitments this semester.</label>
+                        <p>
+                          What classes are you taking this semester? Please let us know any other organizations, employement, or commitments you are involved in this semester.
+                        </p>
                         <p>(Example: CS61A: xx hours)</p>
                         <textarea
                           id='commitments'
