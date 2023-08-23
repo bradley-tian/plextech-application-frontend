@@ -66,7 +66,9 @@ const GraderForm = () => {
 
   useEffect(
     () => {
-      resumeRef.current?.scrollIntoView({ behavior: 'smooth' });
+      if (essaySubmitted) {
+        resumeRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }
     }, [essaySubmitted]
   );
 

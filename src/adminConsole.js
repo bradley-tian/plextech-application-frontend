@@ -412,6 +412,7 @@ function AdminConsole() {
                 return response.json();
             })
             .then((data) => {
+                console.log(data);
                 setIncomplete(data);
             })
             .catch((err) => {
@@ -540,7 +541,9 @@ function AdminConsole() {
                     <div className='horizontal-box'>
                         <h2>Progress Check</h2>
                         <p>Any grader who has not completed their assignments will be listed here.</p>
-                        <p>{incomplete.toString()}</p>
+                        {incomplete.map(
+                            (message) => (message.map((word) => <p>{word + " "}</p>))
+                        )}
                     </div>
 
                     <div className="horizontal-box">
