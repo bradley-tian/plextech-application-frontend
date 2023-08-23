@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import "./styles.css";
@@ -57,10 +57,18 @@ const GraderForm = () => {
   const [comment3, setComment3] = useState('');
   const [comment4, setComment4] = useState('');
   const [loadingMessage, setLoading] = useState('');
+  const [essaySubmitted, setEssaySubmitted] = useState(false);
+  const resumeRef = useRef(null);
 
   const navToHome = () => {
     navigate("/");
   };
+
+  useEffect(
+    () => {
+      resumeRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [essaySubmitted]
+  );
 
   const { state } = useLocation();
 
@@ -273,7 +281,8 @@ const GraderForm = () => {
                     <p>{userInfo[0].major}</p>
                   </div>
 
-                  <label htmlFor="gender">Gender</label>
+                  {/* Not shown because we eliminated DE&I factors in application reviews */}
+                  {/* <label htmlFor="gender">Gender</label>
                   <div className="horizontal-box">
                     <p>{userInfo[0].gender}</p>
                   </div>
@@ -281,7 +290,7 @@ const GraderForm = () => {
                   <label htmlFor="race">Demographics</label>
                   <div className="horizontal-box">
                     <p>{typeof userInfo[0].race != typeof undefined ? userInfo[0].race : 'N/A'}</p>
-                  </div>
+                  </div> */}
 
                   <label htmlFor="website">Personal Website</label>
                   <div className="horizontal-box">
@@ -298,225 +307,254 @@ const GraderForm = () => {
                     <p>{typeof userInfo[0].roles != typeof undefined ? userInfo[0].roles.toString() : "Member"}</p>
                   </div>
 
-                  <h4 style={{color: '#ec6f34'}}>Resume/CV</h4>
+                  {
+                    essaySubmitted
+                      ? <></>
+                      : <>
+                        {/* Essay Question 1 */}
+                        <div className="horizontal-box">
+                          <h4 style={{ color: '#ec6f34' }}>Question 1</h4>
+                          <label htmlFor="answer1">
+                            Why do you want to join PlexTech?
+                          </label>
+                          <p>{userInfo[0].answer1}</p>
 
-                  {/* Resume */}
-                  <div className="horizontal-box">
-                    <iframe src={userInfo[0].resume} />
-                    <label htmlFor="comment0">Comment</label>
-                    <textarea
-                      className="commentHeight"
-                      id="comment0"
-                      type="text"
-                      wrap="soft"
-                      value={comment0}
-                      onChange={(event) => { setComment0(event.target.value) }}
-                    />
+                          <label htmlFor="comment1">Comment</label>
 
-                    <label htmlFor="resCom">
-                      Do experiences in the applicant's resume exhibit consistency and commitment?
-                    </label>
-                    <select className="dropbtn" name="resCommit" value={resCommit} onChange={(event) => { setResCommit(event.target.value) }}>
-                      <option value="" disabled={true}>Choose a rating:</option>
-                      <option value={1}>1 (Not at all)</option>
-                      <option value={2}>2</option>
-                      <option value={3}>3</option>
-                      <option value={4}>4</option>
-                      <option value={5}>5 (A perfect amount)</option>
-                    </select>
+                          <textarea
+                            className="commentHeight"
+                            id="comment1"
+                            type="text"
+                            wrap="soft"
+                            value={comment1}
+                            onChange={(event) => { setComment1(event.target.value) }}
+                          />
 
-                    <label htmlFor="res">
-                      What quality of leadership experiences does the applicant's resume display?
-                    </label>
-                    <select className="dropbtn" name="resLead" value={resLead} onChange={(event) => { setResLead(event.target.value) }}>
-                      <option value="" disabled={true}>Choose a rating:</option>
-                      <option value={1}>1 (No leadership experience)</option>
-                      <option value={2}>2</option>
-                      <option value={3}>3</option>
-                      <option value={4}>4</option>
-                      <option value={5}>5 (Major leadership experiences)</option>
-                    </select>
+                          <label htmlFor="res">
+                            How well does the applicant demonstrate their ability to take on initiatives?
+                          </label>
+                          <select className="dropbtn" name="initiative" value={initiative} onChange={(event) => { setInitiative(event.target.value) }}>
+                            <option value="" disabled={true}>Choose a rating:</option>
+                            <option value={1}>1 (No trace at all)</option>
+                            <option value={2}>2</option>
+                            <option value={3}>3</option>
+                            <option value={4}>4</option>
+                            <option value={5}>5 (Clear signs of unique initiatives taken)</option>
+                          </select>
 
-                    <label htmlFor="res">
-                      What kind of technical experience (don't need to be CS-related: bio, engineering, math, etc.) does the applicant's resume display?
-                    </label>
-                    <select className="dropbtn" name="resTech" value={resTech} onChange={(event) => { setResTech(event.target.value) }}>
-                      <option value="" disabled={true}>Choose a rating:</option>
-                      <option value={1}>1 (No technical experience)</option>
-                      <option value={2}>2</option>
-                      <option value={3}>3</option>
-                      <option value={4}>4</option>
-                      <option value={5}>5 (Significant technical experiences)</option>
-                    </select>
-                  </div>
+                          <label htmlFor="res">
+                            How well does the applicant demonstrate their problem-solving abilities?
+                          </label>
+                          <select className="dropbtn" name="problem" value={problem} onChange={(event) => { setProblem(event.target.value) }}>
+                            <option value="" disabled={true}>Choose a rating:</option>
+                            <option value={1}>1 (No trace at all)</option>
+                            <option value={2}>2</option>
+                            <option value={3}>3</option>
+                            <option value={4}>4</option>
+                            <option value={5}>5 (Clear, impressive description of problem-solving processes)</option>
+                          </select>
+                        </div>
 
-                  <br/>
-                  <br/>
+                        <br />
 
-                  {/* Essay Question 1 */}
-                  <div className="horizontal-box">
-                    <h4 style={{color: '#ec6f34'}}>Question 1</h4>
-                    <label htmlFor="answer1">
-                      Describe how you have taken advantage of a significant opportunity or worked to overcome a barrier you have faced.
-                    </label>
-                    <p>{userInfo[0].answer1}</p>
+                        {/* Essay Question 2 */}
+                        <div className="horizontal-box">
+                          <h4 style={{ color: '#ec6f34' }}>Question 2</h4>
+                          <label htmlFor="essay2">
+                            Tell us about a community that's especially important to you.
+                          </label>
+                          <p>{userInfo[0].answer2}</p>
 
-                    <label htmlFor="comment1">Comment</label>
+                          <label htmlFor="comment2">Comment</label>
+                          <textarea
+                            className="commentHeight"
+                            id="comment2"
+                            type="text"
+                            wrap="soft"
+                            value={comment2}
+                            onChange={(event) => { setComment2(event.target.value) }}
+                          />
 
-                    <textarea
-                      className="commentHeight"
-                      id="comment1"
-                      type="text"
-                      wrap="soft"
-                      value={comment1}
-                      onChange={(event) => { setComment1(event.target.value) }}
-                    />
+                          <label htmlFor="answer2Rating">
+                            How well does the applicant demonstrate their ability to commit to a community?
+                          </label>
+                          <select className="dropbtn" name="commitment" value={ansCommit} onChange={(event) => { setAnsCommit(event.target.value) }}>
+                            <option value="" disabled={true}>Choose a rating:</option>
+                            <option value={1}>1 (Not at all)</option>
+                            <option value={2}>2</option>
+                            <option value={3}>3</option>
+                            <option value={4}>4</option>
+                            <option value={5}>5 (Exhibiting strong willingness to commit to a community)</option>
+                          </select>
 
-                    <label htmlFor="res">
-                      How well does the applicant demonstrate their ability to take on initiatives?
-                    </label>
-                    <select className="dropbtn" name="initiative" value={initiative} onChange={(event) => { setInitiative(event.target.value) }}>
-                      <option value="" disabled={true}>Choose a rating:</option>
-                      <option value={1}>1 (No trace at all)</option>
-                      <option value={2}>2</option>
-                      <option value={3}>3</option>
-                      <option value={4}>4</option>
-                      <option value={5}>5 (Clear signs of unique initiatives taken)</option>
-                    </select>
+                          <label htmlFor="answer2Rating">
+                            To what extent has the applicant impacted their community?
+                          </label>
+                          <select className="dropbtn" name="impact" value={impact} onChange={(event) => { setImpact(event.target.value) }}>
+                            <option value="" disabled={true}>Choose a rating:</option>
+                            <option value={1}>1 (No sign at all)</option>
+                            <option value={2}>2</option>
+                            <option value={3}>3</option>
+                            <option value={4}>4</option>
+                            <option value={5}>5 (Significant impacts to the community)</option>
+                          </select>
+                        </div>
 
-                    <label htmlFor="res">
-                      How well does the applicant demonstrate their problem-solving abilities?
-                    </label>
-                    <select className="dropbtn" name="problem" value={problem} onChange={(event) => { setProblem(event.target.value) }}>
-                      <option value="" disabled={true}>Choose a rating:</option>
-                      <option value={1}>1 (No trace at all)</option>
-                      <option value={2}>2</option>
-                      <option value={3}>3</option>
-                      <option value={4}>4</option>
-                      <option value={5}>5 (Clear, impressive description of problem-solving processes)</option>
-                    </select>
-                  </div>
+                        <br />
 
-                  <br/>
-                  <br/>
+                        {/* Essay Question 3 */}
+                        <div className="horizontal-box">
+                          <h4 style={{ color: '#ec6f34' }}>Question 3</h4>
+                          <label htmlFor="essay3">
+                            Tell us about a time when you "hacked a system."
+                          </label>
+                          <p>{userInfo[0].answer3}</p>
 
-                  {/* Essay Question 2 */}
-                  <div className="horizontal-box">
-                    <h4 style={{color: '#ec6f34'}}>Question 2</h4>
-                    <label htmlFor="essay2">
-                      Tell us about a community that’s especially important to you: how did you contribute to this community, and what makes it so inspiring?
-                    </label>
-                    <p>{userInfo[0].answer2}</p>
+                          <label htmlFor="comment3">Comment</label>
+                          <textarea
+                            className="commentHeight"
+                            id="comment3"
+                            type="text"
+                            wrap="soft"
+                            value={comment3}
+                            onChange={(event) => { setComment3(event.target.value) }}
+                          />
 
-                    <label htmlFor="comment2">Comment</label>
-                    <textarea
-                      className="commentHeight"
-                      id="comment2"
-                      type="text"
-                      wrap="soft"
-                      value={comment2}
-                      onChange={(event) => { setComment2(event.target.value) }}
-                    />
+                          <label htmlFor="answer3Rating">
+                            How well does the applicant exhibit a sense of passion for learning and solving problems?
+                          </label>
+                          <select className="dropbtn" name="passion" value={passion} onChange={(event) => { setPassion(event.target.value) }}>
+                            <option value="" disabled={true}>Choose a rating:</option>
+                            <option value={1}>1 (No sign at all)</option>
+                            <option value={2}>2</option>
+                            <option value={3}>3</option>
+                            <option value={4}>4</option>
+                            <option value={5}>5 (An avid passion is exhibited)</option>
+                          </select>
 
-                    <label htmlFor="answer2Rating">
-                      How well does the applicant demonstrate their ability to commit to a community? 
-                    </label>
-                    <select className="dropbtn" name="commitment" value={ansCommit} onChange={(event) => { setAnsCommit(event.target.value) }}>
-                      <option value="" disabled={true}>Choose a rating:</option>
-                      <option value={1}>1 (Not at all)</option>
-                      <option value={2}>2</option>
-                      <option value={3}>3</option>
-                      <option value={4}>4</option>
-                      <option value={5}>5 (Exhibiting strong willingness to commit to a community)</option>
-                    </select>
+                          <label htmlFor="answer3Rating">
+                            To what extent did the applicant go above and beyond in their project?
+                          </label>
+                          <select className="dropbtn" name="passion" value={excellence} onChange={(event) => { setExcellence(event.target.value) }}>
+                            <option value="" disabled={true}>Choose a rating:</option>
+                            <option value={1}>1 (No sign at all)</option>
+                            <option value={2}>2</option>
+                            <option value={3}>3</option>
+                            <option value={4}>4</option>
+                            <option value={5}>5 (Impressive excellence is shown)</option>
+                          </select>
+                        </div>
 
-                    <label htmlFor="answer2Rating">
-                      To what extent has the applicant impacted their community? 
-                    </label>
-                    <select className="dropbtn" name="impact" value={impact} onChange={(event) => { setImpact(event.target.value) }}>
-                      <option value="" disabled={true}>Choose a rating:</option>
-                      <option value={1}>1 (No sign at all)</option>
-                      <option value={2}>2</option>
-                      <option value={3}>3</option>
-                      <option value={4}>4</option>
-                      <option value={5}>5 (Significant impacts to the community)</option>
-                    </select>
-                  </div>
+                        <br />
 
-                  <br/>
-                  <br/>
+                        {/* Time Commitments */}
+                        <div className="horizontal-box">
+                          <h4 style={{ color: '#ec6f34' }}>Time Commitments</h4>
+                          <p>{userInfo[0].commitments}</p>
 
-                  {/* Essay Question 3 */}
-                  <div className="horizontal-box">
-                    <h4 style={{color: '#ec6f34'}}>Question 3</h4>
-                    <label htmlFor="essay3">
-                      Tell us about a technical (not necessarily CS-related; could be robotics, graphic design, etc.) project you’ve worked on in the past.
-                    </label>
-                    <p>{userInfo[0].answer3}</p>
+                          <label htmlFor="comment4">Comment</label>
+                          <textarea
+                            className="commentHeight"
+                            id="comment4"
+                            type="text"
+                            wrap="soft"
+                            value={comment4}
+                            onChange={(event) => { setComment4(event.target.value) }}
+                          />
 
-                    <label htmlFor="comment3">Comment</label>
-                    <textarea
-                      className="commentHeight"
-                      id="comment3"
-                      type="text"
-                      wrap="soft"
-                      value={comment3}
-                      onChange={(event) => { setComment3(event.target.value) }}
-                    />
+                          <label htmlFor="commitment">
+                            Do the applicant's commitments seem concerning (WAY too many clubs, insane unit count, etc.)?
+                          </label>
+                          <select className="dropbtn" name="commitment" value={commitment} onChange={(event) => { setcommitment(event.target.value) }}>
+                            <option value="" disabled={true}>Choose a rating:</option>
+                            <option value={3}>Not at all</option>
+                            <option value={2}>Could be a problem</option>
+                            <option value={1}>RED FLAG</option>
+                          </select>
+                        </div>
 
-                    <label htmlFor="answer3Rating">
-                      How well does the applicant exhibit a sense of passion for learning and solving problems?
-                    </label>
-                    <select className="dropbtn" name="passion" value={passion} onChange={(event) => { setPassion(event.target.value) }}>
-                      <option value="" disabled={true}>Choose a rating:</option>
-                      <option value={1}>1 (No sign at all)</option>
-                      <option value={2}>2</option>
-                      <option value={3}>3</option>
-                      <option value={4}>4</option>
-                      <option value={5}>5 (An avid passion is exhibited)</option>
-                    </select>
+                        <br />
 
-                    <label htmlFor="answer3Rating">
-                      To what extent did the applicant go above and beyond in their project? 
-                    </label>
-                    <select className="dropbtn" name="passion" value={excellence} onChange={(event) => { setExcellence(event.target.value) }}>
-                      <option value="" disabled={true}>Choose a rating:</option>
-                      <option value={1}>1 (No sign at all)</option>
-                      <option value={2}>2</option>
-                      <option value={3}>3</option>
-                      <option value={4}>4</option>
-                      <option value={5}>5 (Impressive excellence is shown)</option>
-                    </select>
-                  </div>
+                        <p>
+                          Please confirm your essay reviews before moving onto the next section. You cannot go back and edit your current responses beyond this point.
+                        </p>
 
-                  <br/>
-                  <br/>
+                        <div className='horizontal-box'>
+                          <Button
+                            onClick={() => {
+                              setEssaySubmitted(true);
+                            }}
+                            variant="contained"
+                            color="neutral"
+                            fontWeight="Bold"
+                          >
+                            Confirm Essay Reviews
+                          </Button>
+                        </div>
 
-                  {/* Time Commitments */}
-                  <div className="horizontal-box">
-                    <h4 style={{color: '#ec6f34'}}>Time Commitments</h4>
-                    <p>{userInfo[0].commitments}</p>
+                      </>
+                  }
+                  <br ref={resumeRef} />
 
-                    <label htmlFor="comment4">Comment</label>
-                    <textarea
-                      className="commentHeight"
-                      id="comment4"
-                      type="text"
-                      wrap="soft"
-                      value={comment4}
-                      onChange={(event) => { setComment4(event.target.value) }}
-                    />
+                  {
+                    essaySubmitted
+                      ? <>
+                        <h4 style={{ color: '#ec6f34' }}>Resume/CV</h4>
 
-                    <label htmlFor="commitment">
-                      Do the applicant's commitments seem concerning (WAY too many clubs, insane unit count, etc.)?
-                    </label>
-                    <select className="dropbtn" name="commitment" value={commitment} onChange={(event) => { setcommitment(event.target.value) }}>
-                      <option value="" disabled={true}>Choose a rating:</option>
-                      <option value={3}>Not at all</option>
-                      <option value={2}>Could be a problem</option>
-                      <option value={1}>RED FLAG</option>
-                    </select>
-                  </div>
+                        {/* Resume */}
+                        <div className="horizontal-box">
+                          <iframe src={userInfo[0].resume} />
+                          <label htmlFor="comment0">Comment</label>
+                          <textarea
+                            className="commentHeight"
+                            id="comment0"
+                            type="text"
+                            wrap="soft"
+                            value={comment0}
+                            onChange={(event) => { setComment0(event.target.value) }}
+                          />
+
+                          <label htmlFor="resCom">
+                            Do experiences in the applicant's resume exhibit consistency and commitment?
+                          </label>
+                          <select className="dropbtn" name="resCommit" value={resCommit} onChange={(event) => { setResCommit(event.target.value) }}>
+                            <option value="" disabled={true}>Choose a rating:</option>
+                            <option value={1}>1 (Not at all)</option>
+                            <option value={2}>2</option>
+                            <option value={3}>3</option>
+                            <option value={4}>4</option>
+                            <option value={5}>5 (A perfect amount)</option>
+                          </select>
+
+                          <label htmlFor="res">
+                            What quality of leadership experiences does the applicant's resume display?
+                          </label>
+                          <select className="dropbtn" name="resLead" value={resLead} onChange={(event) => { setResLead(event.target.value) }}>
+                            <option value="" disabled={true}>Choose a rating:</option>
+                            <option value={1}>1 (No leadership experience)</option>
+                            <option value={2}>2</option>
+                            <option value={3}>3</option>
+                            <option value={4}>4</option>
+                            <option value={5}>5 (Major leadership experiences)</option>
+                          </select>
+
+                          <label htmlFor="res">
+                            What kind of technical experience (don't need to be CS-related: bio, engineering, math, etc.) does the applicant's resume display?
+                          </label>
+                          <select className="dropbtn" name="resTech" value={resTech} onChange={(event) => { setResTech(event.target.value) }}>
+                            <option value="" disabled={true}>Choose a rating:</option>
+                            <option value={1}>1 (No technical experience)</option>
+                            <option value={2}>2</option>
+                            <option value={3}>3</option>
+                            <option value={4}>4</option>
+                            <option value={5}>5 (Significant technical experiences)</option>
+                          </select>
+                        </div>
+                      </>
+                      : <></>
+                  }
+
+                  <br />
 
                   {/* Submit Button */}
                   <div className='horizontal-box'>
