@@ -5,6 +5,7 @@ import "./styles.css";
 import Button from "@mui/material/Button";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate, useLocation } from "react-router-dom";
+import LinearProgress from '@mui/material/LinearProgress';
 
 const theme = createTheme({
   status: {
@@ -60,6 +61,8 @@ const GraderForm = () => {
   const [loadingMessage, setLoading] = useState('');
   const [essaySubmitted, setEssaySubmitted] = useState(false);
   const resumeRef = useRef(null);
+  const [completed, setCompleted] = useState(0);
+  const [total, setTotal] = useState(0);
 
   const navToHome = () => {
     navigate("/");
@@ -72,6 +75,12 @@ const GraderForm = () => {
       }
     }, [essaySubmitted]
   );
+
+  useEffect(
+    () => {
+      setLoading("");
+    }, [completed]
+  )
 
   const { state } = useLocation();
 
@@ -101,6 +110,8 @@ const GraderForm = () => {
         if (data.length === 0) {
           navigate('/complete')
         }
+
+        setTotal(data.length);
 
         for (let applicant of data) {
           var arrayBuffer = base64ToArrayBuffer(applicant.resume.slice(28));
@@ -183,7 +194,7 @@ const GraderForm = () => {
             gender: userInfo[0].gender,
           }}
           onSubmit={async () => {
-            setLoading('Submitting your application; please wait...');
+            setLoading('Submitting your review; please wait...');
             await fetch(`${process.env.REACT_APP_API_URL}/add_review`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -233,6 +244,7 @@ const GraderForm = () => {
                 setComment3('');
                 setComment4('');
               });
+            setCompleted(completed + 1);
           }}
         >
           {(formik) => (
@@ -252,6 +264,8 @@ const GraderForm = () => {
               </span>
 
               <div>
+                <p>Reviews Completed: {completed} / {total}</p>
+                <LinearProgress variant="determinate" value={Math.floor(completed / total * 100)} />
                 <h4>
                   For each applicant, please provide the corresponding ratings and leave concise
                   comments for every response.
@@ -560,16 +574,18 @@ const GraderForm = () => {
                   <br />
 
                   {/* Submit Button */}
-                  <div className='horizontal-box'>
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      color="neutral"
-                      fontWeight="Bold"
-                    >
-                      Submit
-                    </Button>
-                  </div>
+                  {
+                    essaySubmitted ? <div className='horizontal-box'>
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        color="neutral"
+                        fontWeight="Bold"
+                      >
+                        Submit
+                      </Button>
+                    </div> : <></>
+                  }
                   <p>{loadingMessage}</p>
                 </form>
               </div>
