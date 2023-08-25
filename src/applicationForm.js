@@ -43,64 +43,57 @@ const MenuProps = {
   },
 };
 
-const roles = [
-  'Curriculum Developer',
-  'Project Developer',
-];
+// function getStyles(role, roles, theme) {
+//   return {
+//     fontWeight:
+//       roles.indexOf(role) === -1
+//         ? theme.typography.fontWeightRegular
+//         : theme.typography.fontWeightMedium,
+//   };
+// }
 
-function getStyles(role, roles, theme) {
-  return {
-    fontWeight:
-      roles.indexOf(role) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
+// function RoleSelector(props) {
+//   const handleChange = (event) => {
+//     const {
+//       target: { value },
+//     } = event;
+//     props.setRoles(
+//       typeof value === 'string' ? value.split(',') : value,
+//     );
+//   };
 
-function RoleSelector(props) {
-  const handleChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    props.setRoles(
-      typeof value === 'string' ? value.split(',') : value,
-    );
-  };
-
-  return (
-    <>
-      <FormControl id='roleSelector' sx={{ m: 1, width: '70%' }}>
-        <label id="desiredRoles">Intended Roles (Select all that apply)</label>
-        <Select
-          labelId="roles"
-          id="roles"
-          multiple
-          value={props.roles}
-          onChange={handleChange}
-          input={<OutlinedInput label="Role" />}
-          MenuProps={MenuProps}
-        >
-          {roles.map((role) => (
-            <MenuItem
-              key={role}
-              value={role}
-              style={getStyles(role, roles, theme)}
-            >
-              {role}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </>
-
-
-  );
-}
+//   return (
+//     <>
+//       <FormControl id='roleSelector' sx={{ m: 1, width: '70%' }}>
+//         <label id="desiredRoles">Intended Roles (Select all that apply)</label>
+//         <Select
+//           labelId="roles"
+//           id="roles"
+//           multiple
+//           value={props.roles}
+//           onChange={handleChange}
+//           input={<OutlinedInput label="Role" />}
+//           MenuProps={MenuProps}
+//         >
+//           {roles.map((role) => (
+//             <MenuItem
+//               key={role}
+//               value={role}
+//               style={getStyles(role, roles, theme)}
+//             >
+//               {role}
+//             </MenuItem>
+//           ))}
+//         </Select>
+//       </FormControl>
+//     </>
+//   );
+// }
 
 
 const ApplicationForm = () => {
   const navigate = useNavigate();
-  const [role, setRole] = React.useState([]);
+  const [role, setRole] = React.useState('');
   const [resume, setResume] = React.useState('');
   const [year, setYear] = React.useState('2023');
   const [gender, setGender] = React.useState('');
@@ -158,7 +151,7 @@ const ApplicationForm = () => {
                 linkedin: '',
                 website: '',
                 timestamp: Date.now(),
-                desiredRoles: [],
+                desiredRoles: '',
                 answer1: '',
                 answer2: '',
                 answer3: '',
@@ -231,13 +224,18 @@ const ApplicationForm = () => {
                   setLoading('Please fill out the required fields above.');
                   flagged = true;
                 }
-                if (role.length === 0) {
-                  setRoleMessage('required');
+                // if (role.length === 0) {
+                //   setRoleMessage('required');
+                //   setLoading('Please fill out the required fields above.');
+                //   flagged = true;
+                // }
+                if (resume.length === 0) {
+                  setResumeMessage('required');
                   setLoading('Please fill out the required fields above.');
                   flagged = true;
                 }
-                if (resume.length === 0) {
-                  setResumeMessage('required');
+                if (role === '') {
+                  setRoleMessage('required');
                   setLoading('Please fill out the required fields above.');
                   flagged = true;
                 }
@@ -416,7 +414,7 @@ const ApplicationForm = () => {
                       </div>
 
                       { /* Demographics */}
-                      <div>
+                      <div className="horizontal-box">
                         <label htmlFor="race">
                           Your Demographic Background
                         </label>
@@ -435,10 +433,15 @@ const ApplicationForm = () => {
                         <p className='warning'>{raceMessage}</p>
                       </div>
 
-                      {/* Desired Roles */}
+                      {/* Desired Role */}
                       <div className="horizontal-box">
-                        <RoleSelector id='desiredRoles' roles={role} setRoles={setRole} />
-                        <p className='warning'>{roleMessage}</p>
+                        <label htmlFor="role">Intended Role</label>
+                        <select className="dropbtn" name="role" value={role} onChange={(event) => { setRole(event.target.value) }}>
+                          <option value="" disabled={true}>Please select: </option>
+                          <option value={"Curriculum Student"}>Curriculum Student</option>
+                          <option value={"Industry Developer"}>Industry Developer</option>
+                        </select>
+                        <p className="warning">{roleMessage}</p>
                       </div>
 
                       {/* Resume Upload */}

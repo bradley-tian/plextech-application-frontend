@@ -28,6 +28,7 @@ const GraderForm = () => {
     firstName: "",
     lastName: "",
     resume: "",
+    role: "",
     answer1: "",
     answer2: "",
     commitments: "",
@@ -172,7 +173,7 @@ const GraderForm = () => {
             firstName: userInfo[0].firstName,
             lastName: userInfo[0].lastName,
             resume: userInfo[0].resumeURL,
-            roles: JSON.stringify(userInfo[0].roles),
+            roles: userInfo[0].roles,
             answer1: userInfo[0].answer1,
             answer2: userInfo[0].answer2,
             answer3: userInfo[0].answer3,
@@ -306,7 +307,7 @@ const GraderForm = () => {
 
                   <label htmlFor="roles">Desired roles</label>
                   <div className="horizontal-box">
-                    <p>{typeof userInfo[0].roles != typeof undefined ? userInfo[0].roles.toString() : "Member"}</p>
+                    <p>{typeof userInfo[0].roles != typeof undefined ? userInfo[0].roles : "Not Specified"}</p>
                   </div>
 
                   {
