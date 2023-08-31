@@ -95,7 +95,7 @@ const ApplicationForm = () => {
   const navigate = useNavigate();
   const [role, setRole] = React.useState('');
   const [resume, setResume] = React.useState('');
-  const [year, setYear] = React.useState('2023');
+  const [year, setYear] = React.useState(current_grad_year.toString());
   const [gender, setGender] = React.useState('');
   const [race, setRace] = React.useState('');
   const [loadingMessage, setLoading] = React.useState('');
