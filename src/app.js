@@ -16,7 +16,10 @@ function App() {
         <div className = 'App'>
             <Routes>
                 <Route path='/' element={<Home/>}/>
-                <Route path='apply' element={<ApplicationForm/>}/>
+
+                {/* Switch this route on/off to open/close applications */}
+                {/* <Route path='apply' element={<ApplicationForm/>}/> */}
+
                 <Route path='grading' element={<GradingInterface email=""/>}/>
                 <Route path='success' element={<SuccessPage/>}/>
                 <Route path='complete' element={<CompletionPage/>}/>

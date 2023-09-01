@@ -32,7 +32,7 @@ const GraderForm = () => {
     role: "",
     answer1: "",
     answer2: "",
-    commitments: "",
+    r0s: "",
     year: "",
     major: "",
     gender: "",
@@ -41,17 +41,17 @@ const GraderForm = () => {
     race: "",
   }]);
 
-  const [resCommit, setResCommit] = useState("1");
-  const [resLead, setResLead] = useState("1");
-  const [resTech, setResTech] = useState("1");
+  const [r1, setR1] = useState("1");
+  const [r2, setR2] = useState("1");
+  const [r3, setR3] = useState("1");
 
-  const [initiative, setInitiative] = useState("1");
-  const [problem, setProblem] = useState("1");
-  const [ansCommit, setAnsCommit] = useState("1");
-  const [impact, setImpact] = useState("1");
-  const [passion, setPassion] = useState("1");
-  const [excellence, setExcellence] = useState("1");
-  const [commitment, setcommitment] = useState("1");
+  const [r4, setR4] = useState("1");
+  const [r5, setR5] = useState("1");
+  const [r6, setR6] = useState("1");
+  const [r7, setR7] = useState("1");
+  const [r8, setR8] = useState("1");
+  const [r9, setR9] = useState("1");
+  const [r0, setr0] = useState("1");
 
   const [comment0, setComment0] = useState('');
   const [comment1, setComment1] = useState('');
@@ -202,20 +202,20 @@ const GraderForm = () => {
 
                 grader: state.email,
                 comment0: comment0,
-                resCommit: resCommit,
-                resLead: resLead,
-                resTech: resTech,
+                r1: r1,
+                r2: r2,
+                r3: r3,
                 comment1: comment1,
-                initiative: initiative,
-                problem: problem,
+                r4: r4,
+                r5: r5,
                 comemnt2: comment2,
-                ansCommit: ansCommit,
-                impact: impact,
+                r6: r6,
+                r7: r7,
                 comment3: comment3,
-                passion: passion,
-                excellence: excellence,
+                r8: r8,
+                r9: r9,
                 comment4: comment4,
-                commitment: commitment,
+                r0: r0,
                 applicantID: userInfo[0].timestamp,
               }),
             })
@@ -228,16 +228,16 @@ const GraderForm = () => {
                 setData(newData);
                 window.scrollTo(0, 0);
 
-                setResCommit('1');
-                setResLead('1');
-                setResTech('1');
-                setInitiative('1');
-                setProblem('1');
-                setAnsCommit('1');
-                setImpact('1');
-                setPassion('1');
-                setExcellence('1');
-                setcommitment('1');
+                setR1('1');
+                setR2('1');
+                setR3('1');
+                setR4('1');
+                setR5('1');
+                setR6('1');
+                setR7('1');
+                setR8('1');
+                setR9('1');
+                setr0('1');
                 setComment0('');
                 setComment1('');
                 setComment2('');
@@ -267,8 +267,9 @@ const GraderForm = () => {
                 <p>Reviews Completed: {completed} / {total}</p>
                 <LinearProgress variant="determinate" value={Math.floor(completed / total * 100)} />
                 <h4>
-                  For each applicant, please provide the corresponding ratings and leave concise
+                  For each applicant, please refer to the provided rubric for assigning ratings and leave concise
                   comments for every response.
+
                 </h4>
 
                 <form onSubmit={formik.handleSubmit}>
@@ -278,7 +279,8 @@ const GraderForm = () => {
                     <p>{typeof userInfo[0].timestamp != typeof undefined ? userInfo[0].timestamp : 'N/A'}</p>
                   </div>
 
-                  <label htmlFor="firstName">First Name</label>
+                  {/* Names are ommitted for now */}
+                  {/* <label htmlFor="firstName">First Name</label>
                   <div className="horizontal-box">
                     <p>{userInfo[0].firstName}</p>
                   </div>
@@ -286,7 +288,7 @@ const GraderForm = () => {
                   <label htmlFor="lastName">Last Name</label>
                   <div className="horizontal-box">
                     <p>{userInfo[0].lastName}</p>
-                  </div>
+                  </div> */}
 
                   <label htmlFor="graduationYear">Graduation Year</label>
                   <div className="horizontal-box">
@@ -309,15 +311,19 @@ const GraderForm = () => {
                     <p>{typeof userInfo[0].race != typeof undefined ? userInfo[0].race : 'N/A'}</p>
                   </div> */}
 
-                  <label htmlFor="website">Personal Website</label>
-                  <div className="horizontal-box">
-                    <p>{typeof userInfo[0].website != typeof undefined ? userInfo[0].website : 'None'}</p>
-                  </div>
+                  {
+                    essaySubmitted ? <>
+                      <label htmlFor="website">Personal Website</label>
+                      <div className="horizontal-box">
+                        <p>{typeof userInfo[0].website != typeof undefined ? userInfo[0].website : 'None'}</p>
+                      </div>
 
-                  <label htmlFor="linkedin">LinkedIn</label>
-                  <div className="horizontal-box">
-                    <p>{typeof userInfo[0].linkedin != typeof undefined ? userInfo[0].linkedin : 'None'}</p>
-                  </div>
+                      <label htmlFor="linkedin">LinkedIn</label>
+                      <div className="horizontal-box">
+                        <p>{typeof userInfo[0].linkedin != typeof undefined ? userInfo[0].linkedin : 'None'}</p>
+                      </div>
+                    </> : <></>
+                  }
 
                   <label htmlFor="roles">Desired roles</label>
                   <div className="horizontal-box">
@@ -348,27 +354,25 @@ const GraderForm = () => {
                           />
 
                           <label htmlFor="res">
-                            How well does the applicant demonstrate their ability to take on initiatives?
+                          To what degree does the applicant demonstrate passion for the club specifically?
                           </label>
-                          <select className="dropbtn" name="initiative" value={initiative} onChange={(event) => { setInitiative(event.target.value) }}>
+                          <select className="dropbtn" name="r4" value={r4} onChange={(event) => { setR4(event.target.value) }}>
                             <option value="" disabled={true}>Choose a rating:</option>
-                            <option value={1}>1 (No trace at all)</option>
+                            <option value={1}>1</option>
                             <option value={2}>2</option>
                             <option value={3}>3</option>
                             <option value={4}>4</option>
-                            <option value={5}>5 (Clear signs of unique initiatives taken)</option>
                           </select>
 
                           <label htmlFor="res">
-                            How well does the applicant demonstrate their problem-solving abilities?
+                          To what extent does the applicant exhibit knowledge about the club (culture, people, projects, etc.)
                           </label>
-                          <select className="dropbtn" name="problem" value={problem} onChange={(event) => { setProblem(event.target.value) }}>
+                          <select className="dropbtn" name="r5" value={r5} onChange={(event) => { setR5(event.target.value) }}>
                             <option value="" disabled={true}>Choose a rating:</option>
-                            <option value={1}>1 (No trace at all)</option>
+                            <option value={1}>1</option>
                             <option value={2}>2</option>
                             <option value={3}>3</option>
                             <option value={4}>4</option>
-                            <option value={5}>5 (Clear, impressive description of problem-solving processes)</option>
                           </select>
                         </div>
 
@@ -393,27 +397,25 @@ const GraderForm = () => {
                           />
 
                           <label htmlFor="answer2Rating">
-                            How well does the applicant demonstrate their ability to commit to a community?
+                            To what degree does the applicant demonstrate leadership skills in their community?
                           </label>
-                          <select className="dropbtn" name="commitment" value={ansCommit} onChange={(event) => { setAnsCommit(event.target.value) }}>
+                          <select className="dropbtn" name="leadership" value={r6} onChange={(event) => { setR6(event.target.value) }}>
                             <option value="" disabled={true}>Choose a rating:</option>
-                            <option value={1}>1 (Not at all)</option>
+                            <option value={1}>1</option>
                             <option value={2}>2</option>
                             <option value={3}>3</option>
                             <option value={4}>4</option>
-                            <option value={5}>5 (Exhibiting strong willingness to commit to a community)</option>
                           </select>
 
                           <label htmlFor="answer2Rating">
-                            To what extent has the applicant impacted their community?
+                            How well does the applicant show commitment to their community?
                           </label>
-                          <select className="dropbtn" name="impact" value={impact} onChange={(event) => { setImpact(event.target.value) }}>
+                          <select className="dropbtn" name="r7" value={r7} onChange={(event) => { setR7(event.target.value) }}>
                             <option value="" disabled={true}>Choose a rating:</option>
-                            <option value={1}>1 (No sign at all)</option>
+                            <option value={1}>1</option>
                             <option value={2}>2</option>
                             <option value={3}>3</option>
                             <option value={4}>4</option>
-                            <option value={5}>5 (Significant impacts to the community)</option>
                           </select>
                         </div>
 
@@ -438,33 +440,31 @@ const GraderForm = () => {
                           />
 
                           <label htmlFor="answer3Rating">
-                            How well does the applicant exhibit a sense of passion for learning and solving problems?
+                            To what degree does the applicant demonstrate creativity in their endeavor?
                           </label>
-                          <select className="dropbtn" name="passion" value={passion} onChange={(event) => { setPassion(event.target.value) }}>
+                          <select className="dropbtn" name="r8" value={r8} onChange={(event) => { setR8(event.target.value) }}>
                             <option value="" disabled={true}>Choose a rating:</option>
-                            <option value={1}>1 (No sign at all)</option>
+                            <option value={1}>1</option>
                             <option value={2}>2</option>
                             <option value={3}>3</option>
                             <option value={4}>4</option>
-                            <option value={5}>5 (An avid passion is exhibited)</option>
                           </select>
 
                           <label htmlFor="answer3Rating">
-                            To what extent did the applicant go above and beyond in their project?
+                          To what degree does the applicant demonstrate passion for learning in their endeavor?
                           </label>
-                          <select className="dropbtn" name="passion" value={excellence} onChange={(event) => { setExcellence(event.target.value) }}>
+                          <select className="dropbtn" name="r9" value={r9} onChange={(event) => { setR9(event.target.value) }}>
                             <option value="" disabled={true}>Choose a rating:</option>
-                            <option value={1}>1 (No sign at all)</option>
+                            <option value={1}>1</option>
                             <option value={2}>2</option>
                             <option value={3}>3</option>
                             <option value={4}>4</option>
-                            <option value={5}>5 (Impressive excellence is shown)</option>
                           </select>
                         </div>
 
                         <br />
 
-                        {/* Time Commitments */}
+                        {/* Time R0s */}
                         <div className="horizontal-box">
                           <h4 style={{ color: '#ec6f34' }}>Time Commitments</h4>
                           <p>{userInfo[0].commitments}</p>
@@ -479,10 +479,10 @@ const GraderForm = () => {
                             onChange={(event) => { setComment4(event.target.value) }}
                           />
 
-                          <label htmlFor="commitment">
-                            Do the applicant's commitments seem concerning (WAY too many clubs, insane unit count, etc.)?
+                          <label htmlFor="r0">
+                            Do the applicant's time commitments seem concerning (WAY too many clubs, insane unit count, etc.)?
                           </label>
-                          <select className="dropbtn" name="commitment" value={commitment} onChange={(event) => { setcommitment(event.target.value) }}>
+                          <select className="dropbtn" name="r0" value={r0} onChange={(event) => { setr0(event.target.value) }}>
                             <option value="" disabled={true}>Choose a rating:</option>
                             <option value={3}>Not at all</option>
                             <option value={2}>Could be a problem</option>
@@ -532,39 +532,36 @@ const GraderForm = () => {
                           />
 
                           <label htmlFor="resCom">
-                            Do experiences in the applicant's resume exhibit consistency and commitment?
+                            How thoughtful and expressive are the explanations in their resume?
                           </label>
-                          <select className="dropbtn" name="resCommit" value={resCommit} onChange={(event) => { setResCommit(event.target.value) }}>
+                          <select className="dropbtn" name="r1" value={r1} onChange={(event) => { setR1(event.target.value) }}>
                             <option value="" disabled={true}>Choose a rating:</option>
-                            <option value={1}>1 (Not at all)</option>
+                            <option value={1}>1</option>
                             <option value={2}>2</option>
                             <option value={3}>3</option>
                             <option value={4}>4</option>
-                            <option value={5}>5 (A perfect amount)</option>
                           </select>
 
                           <label htmlFor="res">
-                            What quality of leadership experiences does the applicant's resume display?
+                            What is the technical depth demonstrated in the resume?
                           </label>
-                          <select className="dropbtn" name="resLead" value={resLead} onChange={(event) => { setResLead(event.target.value) }}>
+                          <select className="dropbtn" name="r2" value={r2} onChange={(event) => { setR2(event.target.value) }}>
                             <option value="" disabled={true}>Choose a rating:</option>
-                            <option value={1}>1 (No leadership experience)</option>
+                            <option value={1}>1</option>
                             <option value={2}>2</option>
                             <option value={3}>3</option>
                             <option value={4}>4</option>
-                            <option value={5}>5 (Major leadership experiences)</option>
                           </select>
 
                           <label htmlFor="res">
-                            What kind of technical experience (don't need to be CS-related: bio, engineering, math, etc.) does the applicant's resume display?
+                          To what degree is the applicant’s passion for learning and building in their resume?
                           </label>
-                          <select className="dropbtn" name="resTech" value={resTech} onChange={(event) => { setResTech(event.target.value) }}>
+                          <select className="dropbtn" name="r3" value={r3} onChange={(event) => { setR3(event.target.value) }}>
                             <option value="" disabled={true}>Choose a rating:</option>
-                            <option value={1}>1 (No technical experience)</option>
+                            <option value={1}>1</option>
                             <option value={2}>2</option>
                             <option value={3}>3</option>
                             <option value={4}>4</option>
-                            <option value={5}>5 (Significant technical experiences)</option>
                           </select>
                         </div>
                       </>
