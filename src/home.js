@@ -48,7 +48,7 @@ function Home() {
 
                     {/* Switch these two statements on/off to start/end applications */}
                     {/* <h4>If you are an applicant, please proceed to the application form.</h4> */}
-                    <h4 style={{color: '#ec6f34'}}>Applications are closed for Spring 2023. Thank you for your interest in PlexTech!</h4>
+                    <h4 style={{color: '#ec6f34'}}>Applications are closed for Fall 2023. Thank you for your interest in PlexTech!</h4>
 
 
                     <div className="home">
