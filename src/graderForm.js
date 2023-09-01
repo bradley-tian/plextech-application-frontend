@@ -245,6 +245,7 @@ const GraderForm = () => {
                 setComment4('');
               });
             setCompleted(completed + 1);
+            setEssaySubmitted(false);
           }}
         >
           {(formik) => (
