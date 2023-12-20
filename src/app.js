@@ -18,7 +18,7 @@ function App() {
                 <Route path='/' element={<Home/>}/>
 
                 {/* Switch this route on/off to open/close applications */}
-                {/* <Route path='apply' element={<ApplicationForm/>}/> */}
+                <Route path='apply' element={<ApplicationForm/>}/>
 
                 <Route path='grading' element={<GradingInterface email=""/>}/>
                 <Route path='success' element={<SuccessPage/>}/>

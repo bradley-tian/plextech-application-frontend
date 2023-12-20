@@ -1,18 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Formik } from "formik";
 import "./styles.css";
 import Button from '@mui/material/Button';
 import { useNavigate } from "react-router-dom";
 import PlexTechLogo from './PlexTechLogo.png'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 
 
 //Hot-Swappable Information
-const semester = "Fall 2023"
+const semester = "Spring 2024"
 const current_grad_year = 2024
 
 //Theme Configuration
@@ -111,6 +107,12 @@ const ApplicationForm = () => {
   const [answer2Message, set2] = React.useState('');
   const [answer3Message, set3] = React.useState('');
   const [commitmentMessage, setCommitment] = React.useState('');
+  const [essayQuestion1, setEssayQuestion1] = React.useState('');
+  const [essayQuestion2, setEssayQuestion2] = React.useState('');
+  const [essayQuestion3, setEssayQuestion3] = React.useState('');
+  const [essayQuestionDesc1, setEssayQuestionDesc1] = React.useState('');
+  const [essayQuestionDesc2, setEssayQuestionDesc2] = React.useState('');
+  const [essayQuestionDesc3, setEssayQuestionDesc3] = React.useState('');
 
 
   const getBase64 = (file) => {
@@ -135,6 +137,33 @@ const ApplicationForm = () => {
   const navToHome = () => {
     navigate("/");
   }
+
+  async function loadPrompts() {
+    await fetch(`${process.env.REACT_APP_API_URL}/load_prompts`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      },
+    })
+    .then((response) => {
+      return (response.json());
+    })
+    .then((data) => {
+      if (Object.keys(data).length != 0) {
+        setEssayQuestion1(data.essay_prompt_1)
+        setEssayQuestion2(data.essay_prompt_2)
+        setEssayQuestion3(data.essay_prompt_3)
+        setEssayQuestionDesc1(data.essay_desc_1)
+        setEssayQuestionDesc2(data.essay_desc_2)
+        setEssayQuestionDesc3(data.essay_desc_3)
+      }
+    })
+  }
+
+  useEffect(() => {
+    loadPrompts();
+  }, [])
 
   return (
     <>
@@ -476,8 +505,8 @@ const ApplicationForm = () => {
 
                       {/* Long Answer 1 */}
                       <div className="horizontal-box">
-                        <label htmlFor="answer1">Why do you want to join PlexTech?</label>
-                        <p>Please elaborate on your understanding of PlexTech and its culture. Feel free to refer to our infosession slides!</p>
+                        <label htmlFor="answer1">{essayQuestion1}</label>
+                        <p>{essayQuestionDesc1}</p>
                         <p>(~200 words)</p>
                         <textarea
                           id='answer1'
@@ -489,11 +518,8 @@ const ApplicationForm = () => {
 
                       {/* Long Answer 2 */}
                       <div className="horizontal-box">
-                        <label htmlFor="answer2">Tell us about a community that’s especially important to you. </label>
-                        <p>
-                          Why did you join the community? What did you learn/gain from it from the experience? How did you give back to the community?
-                          Please feel free to mention specific moments of learning/impact.
-                        </p>
+                        <label htmlFor="answer2">{essayQuestion2}</label>
+                        <p>{essayQuestionDesc2}</p>
                         <p>(~200 words)</p>
                         <textarea
                           id='answer2'
@@ -504,11 +530,8 @@ const ApplicationForm = () => {
 
                       {/* Long Answer 3 */}
                       <div className="horizontal-box">
-                        <label htmlFor="answer3">Please tell us about a time when you "hacked a system."</label>
-                        <p>
-                          This does not have to be computer-related. It could be life hacks, loopholes, etc. 
-                          In other words, please tell us about a creative/unorthodox route you implemented to solve a problem.
-                        </p>
+                        <label htmlFor="answer3">{essayQuestion3}</label>
+                        <p>{essayQuestionDesc3}</p>
                         <p>(~200 words)</p>
                         <textarea
                           id='answer3'

@@ -22,7 +22,14 @@ function AdminConsole() {
     const [evaluations, setEvaluations] = useState([]);
     const [incomplete, setIncomplete] = useState([]);
     const [assignmentsCleared, setAssignmentsCleared] = useState([]);
-
+    const [resumeString, setResumeString] = useState("");
+    const [promptID, setPromptID] = React.useState("");
+    const [essayQuestion1, setEssayQuestion1] = React.useState('');
+    const [essayQuestion2, setEssayQuestion2] = React.useState('');
+    const [essayQuestion3, setEssayQuestion3] = React.useState('');
+    const [essayQuestionDesc1, setEssayQuestionDesc1] = React.useState('');
+    const [essayQuestionDesc2, setEssayQuestionDesc2] = React.useState('');
+    const [essayQuestionDesc3, setEssayQuestionDesc3] = React.useState('');
 
     const theme = createTheme({
         status: {
@@ -94,7 +101,10 @@ function AdminConsole() {
         getApplications();
         getEvaluations();
         getIncomplete();
-        setAssignmentsCleared(false)
+        setAssignmentsCleared(false);
+        loadPrompts();
+        setFlushMessage('');
+        setPromptMessage('');
     }, []);
 
     useEffect(() => {
@@ -125,6 +135,30 @@ function AdminConsole() {
             .catch((err) => {
                 console.log(err.message);
             });
+    }
+
+    async function loadPrompts() {
+        await fetch(`${URL}/load_prompts`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+            },
+        })
+            .then((response) => {
+                return (response.json());
+            })
+            .then((data) => {
+                if (Object.keys(data).length != 0) {
+                    setPromptID(data.id)
+                    setEssayQuestion1(data.essay_prompt_1)
+                    setEssayQuestion2(data.essay_prompt_2)
+                    setEssayQuestion3(data.essay_prompt_3)
+                    setEssayQuestionDesc1(data.essay_desc_1)
+                    setEssayQuestionDesc2(data.essay_desc_2)
+                    setEssayQuestionDesc3(data.essay_desc_3)
+                }
+            })
     }
 
     function Analytics() {
@@ -317,6 +351,21 @@ function AdminConsole() {
         csvExport.generateCsv(applications);
     }
 
+    function exportResume() {
+        const options = {
+            fieldSeparator: ',',
+            quoteStrings: '"',
+            decimalSeparator: '.',
+            showLabels: true,
+            showTitle: true,
+            title: 'Resume',
+            useTextFile: false,
+            useBom: true,
+        };
+        const csvExport = new ExportToCsv(options);
+        csvExport.generateCsv(resumeString);
+    }
+
     function Applications() {
         return (
             <>
@@ -333,243 +382,321 @@ function AdminConsole() {
         )
     }
 
-    async function getEvaluations() {
-        await fetch(`${URL}/evaluate_results`, {
-            method: 'GET',
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-            },
+async function getEvaluations() {
+    await fetch(`${URL}/evaluate_results`, {
+        method: 'GET',
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+        },
+    })
+        .then((response) => {
+            return (response.json());
         })
-            .then((response) => {
-                return (response.json());
-            })
-            .then((data) => {
-                if (data.length === 0) {
-                    setCSVMessage3("There are currently no reviews.");
-                } else {
-                    setEvaluations(data)
-                }
-            })
-            .catch((err) => {
-                console.log(err.message);
-            });
-    }
-
-    function exportEvaluations() {
-        const options = {
-            fieldSeparator: ',',
-            quoteStrings: '"',
-            decimalSeparator: '.',
-            showLabels: true,
-            showTitle: true,
-            title: 'Evaluations',
-            useTextFile: false,
-            useBom: true,
-        };
-        const csvExport = new ExportToCsv(options);
-        csvExport.generateCsv(evaluations);
-    }
-
-    function Evaluations() {
-        return (
-            <>
-                <Button
-                    style={{ display: "flex" }}
-                    variant="contained"
-                    color="neutral"
-                    onClick={exportEvaluations}
-                    className="exportEvaluations"
-                    download
-                >Export Evaluations as CSV File</Button>
-                <p>{CSVMessage3}</p>
-            </>
-        )
-    }
-
-    const [adminKey, setAdminKey] = useState('');
-    const [flushMessage, setFlushMessage] = useState('');
-    async function flushDatabase() {
-        if (adminKey === 'plextechpermission') {
-            await fetch(`${URL}/flush_database`, {
-                method: 'GET',
-            })
-                .then(() => {
-                    setFlushMessage('Database successfully cleared.');
-                })
-                .catch((err) => {
-                    console.log(err.message);
-                });
-        } else {
-            setFlushMessage('Incorrect admin key.')
-        }
-    }
-
-    async function getIncomplete() {
-        await fetch(`${URL}/check_progress`, {
-            method: 'GET',
+        .then((data) => {
+            if (data.length === 0) {
+                setCSVMessage3("There are currently no reviews.");
+            } else {
+                setEvaluations(data)
+            }
         })
-            .then((response) => {
-                return response.json();
-            })
-            .then((data) => {
-                console.log(data);
-                setIncomplete(data);
-            })
-            .catch((err) => {
-                console.log(err.message);
-            });
-    }
+        .catch((err) => {
+            console.log(err.message);
+        });
+}
 
+function exportEvaluations() {
+    const options = {
+        fieldSeparator: ',',
+        quoteStrings: '"',
+        decimalSeparator: '.',
+        showLabels: true,
+        showTitle: true,
+        title: 'Evaluations',
+        useTextFile: false,
+        useBom: true,
+    };
+    const csvExport = new ExportToCsv(options);
+    csvExport.generateCsv(evaluations);
+}
+
+function Evaluations() {
     return (
         <>
-            <ThemeProvider theme={theme}>
-                <div className='form-field'>
-                    <span>
-                        <Button
-                            style={{ display: "flex" }}
-                            variant="contained"
-                            color="neutral"
-                            onClick={() => { navigate('/') }}
-                            className="navHome"
-                        >Return Home</Button>
-
-                        <h1 style={{ display: "flex" }}>
-                            PlexTech Administrator Console
-                        </h1>
-                    </span>
-
-                    {/* Grader Control */}
-                    <Formik
-                        initialValues={{
-                            email: "",
-                        }}
-                        onSubmit={async (values) => {
-                            if (action1 === "add") {
-                                await fetch(`${URL}/add_grader`, {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({
-                                        email: values.email,
-                                    })
-                                }).then(() => {
-                                    setGraderMessage("Successfully added grader " + values.email + ".")
-                                });
-                            } else if (action1 === "remove") {
-                                await fetch(`${URL}/remove_grader`, {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({
-                                        email: values.email,
-                                    })
-                                }).then(() => {
-                                    setGraderMessage("Successfully removed grader " + values.email + ".")
-                                });
-                            }
-                        }}
-                    >
-                        {formik => (
-                            <div className='admin-console'>
-                                <div>
-                                    <h2>Grader Control</h2>
-                                    <h4>Current Graders:</h4>
-                                    <ul>
-                                        {
-                                            graders.map(grader => {
-                                                return (
-                                                    <li key={grader[0]}>{grader[1]}</li>
-                                                )
-                                            })
-                                        }
-                                    </ul>
-                                    <p>{graderMessage}</p>
-
-                                    <form onSubmit={formik.handleSubmit}>
-                                        <label htmlFor="lastName">Grader Email</label>
-                                        <input
-                                            id="email"
-                                            type="text"
-                                            {...formik.getFieldProps('email')} />
-
-                                        <label htmlFor="rating1">
-                                            What do you want to do with this grader?
-                                        </label>
-                                        <select className="dropbtn" name="action1" value={action1} onChange={(event) => { setAction1(event.target.value) }}>
-                                            <option value="" disabled={true}>Select an action:</option>
-                                            <option value="add">add grader</option>
-                                            <option value="remove">remove grader</option>
-                                        </select>
-                                        <div style={{ marginTop: '2rem' }}>
-                                            <Button type="submit"
-                                                variant="contained"
-                                                color="neutral"
-                                                fontWeight="Bold"
-                                                style={{ "marginBottom": "50px" }}
-                                            >Submit</Button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        )}
-                    </Formik>
-
-                    <div className='horizontal-box'>
-                        <h2>Application Analytics</h2>
-                        <Analytics />
-                    </div>
-
-                    <div className='horizontal-box'>
-                        <h2>Grader Assignment Control</h2>
-                        <p>Note: Please ensure that all graders are finalized before performing this action.</p>
-                        <Assignment />
-                    </div>
-
-                    <div className='horizontal-box'>
-                        <h2>Grading Results</h2>
-                        <Results />
-                    </div>
-
-                    <div className='horizontal-box'>
-                        <h2>Applications</h2>
-                        <Applications />
-                    </div>
-
-                    <div className='horizontal-box'>
-                        <h2>Normalized Evaluations</h2>
-                        <Evaluations />
-                    </div>
-
-                    <div className='horizontal-box'>
-                        <h2>Progress Check</h2>
-                        <p>Any grader who has not completed their assignments will be listed here.</p>
-                        {incomplete.map(
-                            (message) => (message.map((word) => <p>{word + " "}</p>))
-                        )}
-                    </div>
-
-                    <div className="horizontal-box">
-                        <h2>DANGER: Database Operations</h2>
-                        <label>Enter admin key to proceed:</label>
-                        <input
-                            type='text'
-                            value={adminKey}
-                            onChange={(e) => setAdminKey(e.target.value)}
-                            style={{ marginBottom: "2rem" }}
-                        ></input>
-                        <Button
-                            style={{ display: "flex" }}
-                            variant="contained"
-                            color="neutral"
-                            onClick={flushDatabase}
-                            className="flushDatabase"
-                        >Flush Database</Button>
-                        <p>{flushMessage}</p>
-                    </div>
-                </div>
-                <br />
-            </ThemeProvider>
+            <Button
+                style={{ display: "flex" }}
+                variant="contained"
+                color="neutral"
+                onClick={exportEvaluations}
+                className="exportEvaluations"
+                download
+            >Export Evaluations as CSV File</Button>
+            <p>{CSVMessage3}</p>
         </>
     )
 }
+
+const [promptMessage, setPromptMessage] = useState('');
+    async function updatePrompts() {
+        if (adminKey === 'plextechpermission') {
+            var change = {
+                id: promptID,
+                essay_prompt_1: essayQuestion1,
+                essay_prompt_2: essayQuestion2,
+                essay_prompt_3: essayQuestion3,
+                essay_desc_1: essayQuestionDesc1,
+                essay_desc_2: essayQuestionDesc2,
+                essay_desc_3: essayQuestionDesc3,
+            }
+            await fetch(`${URL}/change_prompts`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(change)
+            }).then(() => {
+                setPromptMessage("Successfully updated prompt.")
+            });
+        } else {
+            setPromptMessage("Incorrect admin key.")
+        }
+    }
+
+const [adminKey, setAdminKey] = useState('');
+const [flushMessage, setFlushMessage] = useState('');
+async function flushDatabase() {
+    if (adminKey === 'plextechpermission') {
+        await fetch(`${URL}/flush_database`, {
+            method: 'GET',
+        })
+            .then(() => {
+                setFlushMessage('Database successfully cleared.');
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
+    } else {
+        setFlushMessage('Incorrect admin key.')
+    }
+}
+
+async function getIncomplete() {
+    await fetch(`${URL}/check_progress`, {
+        method: 'GET',
+    })
+        .then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            console.log(data);
+            setIncomplete(data);
+        })
+        .catch((err) => {
+            console.log(err.message);
+        });
+}
+
+return (
+    <>
+        <ThemeProvider theme={theme}>
+            <div className='form-field'>
+                <span>
+                    <Button
+                        style={{ display: "flex" }}
+                        variant="contained"
+                        color="neutral"
+                        onClick={() => { navigate('/') }}
+                        className="navHome"
+                    >Return Home</Button>
+
+                    <h1 style={{ display: "flex" }}>
+                        PlexTech Administrator Console
+                    </h1>
+                </span>
+
+                {/* Grader Control */}
+                <Formik
+                    initialValues={{
+                        email: "",
+                    }}
+                    onSubmit={async (values) => {
+                        if (action1 === "add") {
+                            await fetch(`${URL}/add_grader`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    email: values.email,
+                                })
+                            }).then(() => {
+                                setGraderMessage("Successfully added grader " + values.email + ".")
+                            });
+                        } else if (action1 === "remove") {
+                            await fetch(`${URL}/remove_grader`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    email: values.email,
+                                })
+                            }).then(() => {
+                                setGraderMessage("Successfully removed grader " + values.email + ".")
+                            });
+                        }
+                    }}
+                >
+                    {formik => (
+                        <div className='admin-console'>
+                            <div>
+                                <h2>Grader Control</h2>
+                                <h4>Current Graders:</h4>
+                                <ul>
+                                    {
+                                        graders.map(grader => {
+                                            return (
+                                                <li key={grader[0]}>{grader[1]}</li>
+                                            )
+                                        })
+                                    }
+                                </ul>
+                                <p>{graderMessage}</p>
+
+                                <form onSubmit={formik.handleSubmit}>
+                                    <label htmlFor="lastName">Grader Email</label>
+                                    <input
+                                        id="email"
+                                        type="text"
+                                        {...formik.getFieldProps('email')} />
+
+                                    <label htmlFor="rating1">
+                                        What do you want to do with this grader?
+                                    </label>
+                                    <select className="dropbtn" name="action1" value={action1} onChange={(event) => { setAction1(event.target.value) }}>
+                                        <option value="" disabled={true}>Select an action:</option>
+                                        <option value="add">add grader</option>
+                                        <option value="remove">remove grader</option>
+                                    </select>
+                                    <div style={{ marginTop: '2rem' }}>
+                                        <Button type="submit"
+                                            variant="contained"
+                                            color="neutral"
+                                            fontWeight="Bold"
+                                            style={{ "marginBottom": "50px" }}
+                                        >Submit</Button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    )}
+                </Formik>
+
+                <div className='horizontal-box'>
+                    <h2>Application Analytics</h2>
+                    <Analytics />
+                </div>
+
+                <div className='horizontal-box'>
+                    <h2>Grader Assignment Control</h2>
+                    <p>Note: Please ensure that all graders are finalized before performing this action.</p>
+                    <Assignment />
+                </div>
+
+                <div className='horizontal-box'>
+                    <h2>Grading Results</h2>
+                    <Results />
+                </div>
+
+                <div className='horizontal-box'>
+                    <h2>Applications</h2>
+                    <Applications />
+                </div>
+
+                <div className='horizontal-box'>
+                    <h2>Normalized Evaluations</h2>
+                    <Evaluations />
+                </div>
+
+                <div className='horizontal-box'>
+                    <h2>Progress Check</h2>
+                    <p>Any grader who has not completed their assignments will be listed here.</p>
+                    {incomplete.map(
+                        (message) => (message.map((word) => <p>{word + " "}</p>))
+                    )}
+                </div>
+
+                <div className="horizontal-box">
+                    <h2>DANGER: High-Impact Operations</h2>
+                    <label>Enter admin key to proceed:</label>
+                    <input
+                        type='text'
+                        value={adminKey}
+                        onChange={(e) => setAdminKey(e.target.value)}
+                        style={{ marginBottom: "2rem" }}
+                    ></input>
+
+                    <h3>Delete All Reviews</h3>
+                    <Button
+                        style={{ display: "flex" }}
+                        variant="contained"
+                        color="neutral"
+                        onClick={flushDatabase}
+                        className="flushDatabase"
+                    >Flush Database</Button>
+                    <p>{flushMessage}</p>
+
+                    <h3>Change Essay Questions</h3>
+                    <div className="horizontal-box">
+                        <label>Question 1</label>
+                        <textarea
+                            id="major"
+                            type="text"
+                            defaultValue={essayQuestion1}
+                            onChange={(event) => setEssayQuestion1(event.target.value)}
+                        />
+                        <label>Question 1 Description</label>
+                        <textarea
+                            id="major"
+                            type="text"
+                            defaultValue={essayQuestionDesc1}
+                            onChange={(event) => setEssayQuestionDesc1(event.target.value)}
+                        />
+                        <label>Question 2</label>
+                        <textarea
+                            id="major"
+                            type="text"
+                            defaultValue={essayQuestion2}
+                            onChange={(event) => setEssayQuestion2(event.target.value)}
+                        />
+                        <label>Question 2 Description</label>
+                        <textarea
+                            id="major"
+                            type="text"
+                            defaultValue={essayQuestionDesc2}
+                            onChange={(event) => setEssayQuestionDesc2(event.target.value)}
+                        />
+                        <label>Question 3</label>
+                        <textarea
+                            type="text"
+                            defaultValue={essayQuestion3}
+                            onChange={(event) => setEssayQuestion3(event.target.value)}
+                        />
+                        <label>Question 3 Description</label>
+                        <textarea
+                            id="major"
+                            type="text"
+                            defaultValue={essayQuestionDesc3}
+                            onChange={(event) => setEssayQuestionDesc3(event.target.value)}
+                        />
+                        <Button
+                            style={{ display: "flex" }}
+                            variant="contained"
+                            color="neutral"
+                            onClick={updatePrompts}
+                            className="updatePrompts"
+                        >Update Essay Prompts</Button>
+                        <p>{promptMessage}</p>
+                    </div>
+                </div>
+            </div>
+            <br />
+        </ThemeProvider>
+    </>
+)}
 
 export default AdminConsole;
 
