@@ -140,10 +140,6 @@ function AdminConsole() {
     async function loadPrompts() {
         await fetch(`${URL}/load_prompts`, {
             method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-            },
         })
             .then((response) => {
                 return (response.json());
