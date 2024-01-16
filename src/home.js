@@ -92,7 +92,7 @@ function Home() {
                 </div>
             </ThemeProvider>
             <footer>
-                <p className="copyright">Copyright © 2023 PlexTech All Rights Reserved.</p>
+                <p className="copyright">Copyright © 2024 PlexTech All Rights Reserved.</p>
             </footer>
         </>
 
