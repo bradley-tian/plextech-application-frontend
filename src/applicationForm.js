@@ -464,7 +464,7 @@ const ApplicationForm = () => {
                         <select className="dropbtn" name="role" value={role} onChange={(event) => { setRole(event.target.value) }}>
                           <option value="" disabled={true}>Please select: </option>
                           <option value={"Curriculum Student"}>Curriculum Student</option>
-                          <option value={"Industry Developer"}>Industry Developer</option>
+                          {/* <option value={"Industry Developer"}>Industry Developer</option> */}
                         </select>
                         <p className="warning">{roleMessage}</p>
                       </div>
