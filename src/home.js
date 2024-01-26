@@ -47,14 +47,14 @@ function Home() {
                     <h2 style={{ display: 'block' }}>Welcome to the PlexTech Application Platform!</h2>
 
                     {/* Switch these three statements on/off to start/end applications */}
-                    <h4>If you are an applicant, please proceed to the application form.</h4>
-                    {/* <h4 style={{color: '#ec6f34'}}>Applications are closed for Fall 2023. Thank you for your interest in PlexTech!</h4> */}
+                    {/* <h4>If you are an applicant, please proceed to the application form.</h4> */}
+                    <h4 style={{color: '#ec6f34'}}>Applications are closed for Spring 2024. Thank you for your interest in PlexTech!</h4>
                     {/* <h4 style={{color: '#ec6f34'}}>Applications are yet to open for Spring 2024. Please check again later!</h4> */}
 
                     <div className="home">
 
                         {/* Switch this button on/off to start/end applications */}
-                        <Button style={{
+                        {/* <Button style={{
                             "fontFamily": "DM Sans",
                             "marginBottom": "2rem",
                             "display": "block",
@@ -63,7 +63,7 @@ function Home() {
                             onClick={navToApplication}
                             variant="contained"
                             color="neutral"
-                        >Application Form</Button>
+                        >Application Form</Button> */}
 
                         <Button style={{
                             "fontFamily": "DM Sans",
