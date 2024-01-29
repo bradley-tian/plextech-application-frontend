@@ -17,6 +17,10 @@ function Home() {
         navigate("/member-login");
     }
 
+    const navToInterview = () => {
+        navigate("/interview-login");
+    }
+
     const navToAdmin = () => {
         navigate("/admin-login");
     }
@@ -48,7 +52,7 @@ function Home() {
 
                     {/* Switch these three statements on/off to start/end applications */}
                     {/* <h4>If you are an applicant, please proceed to the application form.</h4> */}
-                    <h4 style={{color: '#ec6f34'}}>Applications are closed for Spring 2024. Thank you for your interest in PlexTech!</h4>
+                    <h4 style={{ color: '#ec6f34' }}>Applications are closed for Spring 2024. Thank you for your interest in PlexTech!</h4>
                     {/* <h4 style={{color: '#ec6f34'}}>Applications are yet to open for Spring 2024. Please check again later!</h4> */}
 
                     <div className="home">
@@ -76,6 +80,18 @@ function Home() {
                             variant="outlined"
                             color="secondary"
                         >Grading Interface</Button>
+
+                        <Button style={{
+                            "fontFamily": "DM Sans",
+                            "marginBottom": "2rem",
+                            "display": "block",
+                            "marginRight": '0.5%',
+                        }}
+                            className='homeBtn'
+                            onClick={navToInterview}
+                            variant="outlined"
+                            color="secondary"
+                        >Interview Grading</Button>
 
                         <Button style={{
                             "fontFamily": "DM Sans",

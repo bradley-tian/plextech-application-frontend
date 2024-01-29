@@ -1,5 +1,7 @@
 import Home from './home';
 import ApplicationForm from './applicationForm';
+import InterviewForm from './interviewForm';
+import InterviewComplete from './interviewComplete';
 import GradingInterface from './graderForm';
 import SuccessPage from './successPage';
 import CompletionPage from './completePage';
@@ -8,6 +10,7 @@ import AdminLoginPage from './adminLogin';
 import AdminConsole from './adminConsole';
 import Privacy from './privacyPolicy';
 import FunnyDog from './funnyDog';
+import InterviewLoginPage from './interviewLogin';
 
 import { Routes, Route } from "react-router-dom"
 
@@ -21,8 +24,11 @@ function App() {
                 {/* <Route path='apply' element={<ApplicationForm/>}/> */}
 
                 <Route path='grading' element={<GradingInterface email=""/>}/>
+                <Route path='interview' element={<InterviewForm/>}/>
                 <Route path='success' element={<SuccessPage/>}/>
                 <Route path='complete' element={<CompletionPage/>}/>
+                <Route path='interview-complete' element={<CompletionPage/>}/>
+                <Route path='interview-login' element={<InterviewLoginPage/>}/>
                 <Route path='member-login' element={<MemberLoginPage/>}/>
                 <Route path='admin-login' element={<AdminLoginPage/>}/>
                 <Route path='admin' element={<AdminConsole/>}/>
