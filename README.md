@@ -5,6 +5,8 @@ This readme only provides a high-level overview of the entire project; for more 
 
 This project primarily consists of three components - the application form, the grading interface, and the administrator console, with the last two being reserved for PlexTech members only. 
 
+For the backend repository, please visit [this link](https://github.com/bradley-tian/plextech-application-backend).
+
 ## Application Form
 
 For more details, refer to applicationForm.js. 
